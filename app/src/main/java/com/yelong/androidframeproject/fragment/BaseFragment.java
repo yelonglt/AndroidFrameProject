@@ -1,4 +1,4 @@
-package com.yelong.androidframeproject.activity.fragment;
+package com.yelong.androidframeproject.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
