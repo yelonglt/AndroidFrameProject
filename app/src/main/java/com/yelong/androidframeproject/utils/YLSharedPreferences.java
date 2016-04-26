@@ -12,6 +12,12 @@ import com.yelong.androidframeproject.MainApplication;
 public class YLSharedPreferences {
     public static final String SP_NAME = "yl_helper";
 
+    /**
+     * 是否第一次打开APP
+     */
+    public static final String FIRST_OPEN = "FIRST_OPEN";
+
+
     private volatile static YLSharedPreferences instance = null;
 
     private YLSharedPreferences() {

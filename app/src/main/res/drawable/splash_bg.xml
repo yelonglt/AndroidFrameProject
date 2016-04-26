@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--设置全屏背景图片-->
+    <item>
+        <bitmap android:src="@mipmap/splash_bg" />
+    </item>
+
+    <!--中间的logo-->
+    <!--<item>
+        <bitmap
+            android:gravity="center"
+            android:src="@mipmap/logo" />
+    </item>-->
+
+    <!--底部的版权所有-->
+    <!--<item android:bottom="10dp">
+        <bitmap
+            android:gravity="bottom|center_horizontal"
+            android:src="@mipmap/logo" />
+    </item>-->
+
+</layer-list>
