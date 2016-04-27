@@ -6,10 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 手机工具类
- * Created by eyetech on 16/4/17.
+ * 验证工具类
+ * Created by eyetech on 16/4/27.
  */
-public class MobileUtil {
+public class VerifyUtil {
+
     /**
      * 验证手机号码
      *

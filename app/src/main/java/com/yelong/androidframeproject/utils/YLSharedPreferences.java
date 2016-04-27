@@ -7,6 +7,7 @@ import android.content.SharedPreferences.Editor;
 import com.yelong.androidframeproject.MainApplication;
 
 /**
+ * SharedPreferences工具类
  * Created by eyetech on 16/4/17.
  */
 public class YLSharedPreferences {
