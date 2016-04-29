@@ -67,17 +67,13 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * 设置Toolbar的左边按钮
      *
-     * @param resId    左边图片按钮，resId == 0 不显示图片
+     * @param resId    左边图片按钮，resId == 0 显示默认图片
      * @param listener 按钮监听器
      */
     public void setLeftButtonVisible(@DrawableRes int resId, View.OnClickListener listener) {
-        if (resId == 0) {
-            mLeftImageView.setVisibility(View.GONE);
-        } else {
-            mLeftImageView.setVisibility(View.VISIBLE);
-            mLeftImageView.setImageResource(resId);
-            mLeftImageView.setOnClickListener(listener);
-        }
+        mLeftImageView.setVisibility(View.VISIBLE);
+        mLeftImageView.setImageResource(resId == 0 ? R.mipmap.back : resId);
+        mLeftImageView.setOnClickListener(listener);
     }
 
     /**
@@ -100,7 +96,7 @@ public class BaseActivity extends AppCompatActivity {
      * 设置Toolbar的左边按钮
      *
      * @param title    左边文本，文本为空不显示
-     * @param resId    文本左边的图片，resId == 0 不显示图片
+     * @param resId    文本左边的图片，resId == 0 显示默认图片
      * @param listener 按钮监听器
      */
     public void setLeftButtonVisible(String title, @DrawableRes int resId, View.OnClickListener listener) {
@@ -110,12 +106,10 @@ public class BaseActivity extends AppCompatActivity {
             mLeftTextView.setVisibility(View.VISIBLE);
             mLeftTextView.setText(title);
             mLeftTextView.setOnClickListener(listener);
-            if (resId != 0) {
-                Drawable drawable = getResources().getDrawable(resId);
-                assert drawable != null;
-                drawable.setBounds(0, 0, DensityUtil.dp2px(this, 30), DensityUtil.dp2px(this, 30));
-                mLeftTextView.setCompoundDrawables(drawable, null, null, null);
-            }
+            Drawable drawable = getResources().getDrawable(resId == 0 ? R.mipmap.back : resId);
+            assert drawable != null;
+            drawable.setBounds(0, 0, DensityUtil.dp2px(this, 30), DensityUtil.dp2px(this, 30));
+            mLeftTextView.setCompoundDrawables(drawable, null, null, null);
         }
     }
 

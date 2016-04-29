@@ -1,0 +1,20 @@
+package com.yelong.androidframeproject.event;
+
+/**
+ * Created by eyetech on 16/4/29.
+ */
+public class MessageEvent {
+    private String message;
+
+    public MessageEvent(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}
