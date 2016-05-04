@@ -35,6 +35,7 @@ public class MainActivity extends BaseActivity {
                 EventBus.getDefault().post(new MessageEvent("你在干嘛呢？"));
             }
         }).start();
+
     }
 
     @Override

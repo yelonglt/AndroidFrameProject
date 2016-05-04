@@ -19,6 +19,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -30,6 +31,26 @@ android {
             minifyEnabled false
             debuggable true
         }
+    }
+
+    //打包配置，去掉第三方库配置文件和license信息
+    packagingOptions{
+        exclude 'proguard-project.txt'
+        exclude 'project.properties'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
+    //lint会按默认选项会做严格检查
+    lintOptions{
+        // if true, stop the gradle build if errors are found
+        abortOnError false
+        // if true, only report errors
+        ignoreWarnings true
     }
 }
 

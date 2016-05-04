@@ -15,6 +15,14 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    tasks.withType(JavaCompile){
+        //设置全局编码
+        options.encoding = "UTF-8"
+        //设置全局编译器的版本
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 }
 
 task clean(type: Delete) {
