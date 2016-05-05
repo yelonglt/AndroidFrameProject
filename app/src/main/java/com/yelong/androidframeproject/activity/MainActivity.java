@@ -1,6 +1,8 @@
 package com.yelong.androidframeproject.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.yelong.androidframeproject.EventBusIndex;
@@ -35,6 +37,14 @@ public class MainActivity extends BaseActivity {
                 EventBus.getDefault().post(new MessageEvent("你在干嘛呢？"));
             }
         }).start();
+
+        setRightButtonVisible("测试", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
