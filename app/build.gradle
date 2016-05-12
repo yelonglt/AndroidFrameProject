@@ -11,7 +11,6 @@ apt {
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "com.yelong.androidframeproject"
         minSdkVersion 15
@@ -20,21 +19,28 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        release {
+            keyAlias 'yelong'
+            keyPassword '123456'
+            storeFile file('./keystore/yelong.jks')
+            storePassword '123456'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
-
         debug {
             minifyEnabled false
             debuggable true
         }
     }
-
     //打包配置，去掉第三方库配置文件和license信息
-    packagingOptions{
+    packagingOptions {
         exclude 'proguard-project.txt'
         exclude 'project.properties'
         exclude 'META-INF/LICENSE.txt'
@@ -44,9 +50,8 @@ android {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/DEPENDENCIES'
     }
-
     //lint会按默认选项会做严格检查
-    lintOptions{
+    lintOptions {
         // if true, stop the gradle build if errors are found
         abortOnError false
         // if true, only report errors
@@ -63,7 +68,7 @@ tasks.whenTaskAdded { task ->
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     androidTestCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
@@ -71,4 +76,5 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.7.4'
     compile 'org.greenrobot:eventbus:3.0.0'
     apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
 }

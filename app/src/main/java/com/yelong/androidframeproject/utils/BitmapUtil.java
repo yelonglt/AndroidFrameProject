@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,9 +16,6 @@ import java.io.InputStream;
  * Created by eyetech on 16/4/17.
  */
 public class BitmapUtil {
-    public BitmapUtil() {
-        // TODO Auto-generated constructor stub
-    }
 
     /**
      * 把二进制数组转化成位图
@@ -178,13 +176,138 @@ public class BitmapUtil {
      * @return
      */
     public static Bitmap rotateBitmap(int angle, Bitmap bitmap) {
+        if (bitmap == null) return null;
+        if (angle == 0) return bitmap;
+
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
 
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
-
-        Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-
-        return rotatedBitmap;
+        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
     }
+
+    /**
+     * 获取全屏图片
+     *
+     * @param filePath       文件路径
+     * @param maxNumOfPixels 手机长宽像素的乘积
+     * @return
+     */
+    public static Bitmap getSmallBitmap(String filePath, int maxNumOfPixels) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+        options.inSampleSize = computeSampleSize(options, -1, maxNumOfPixels);
+
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;// 降低图片从AR
+
+        int angle = readNativePictureDegree(filePath);
+
+        return rotateBitmap(angle, BitmapFactory.decodeFile(filePath, options));
+    }
+
+    /**
+     * 获取全屏图片
+     *
+     * @param res
+     * @param resId
+     * @param maxNumOfPixels 手机长宽像素的乘积
+     * @return
+     */
+    public static Bitmap getSmallBitmap(Resources res, int resId, int maxNumOfPixels) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        options.inSampleSize = computeSampleSize(options, -1, maxNumOfPixels);
+
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;// 降低图片从AR
+
+        Bitmap bitmap = BitmapFactory.decodeResource(res, resId, options);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), new Matrix(), true);
+    }
+
+    /**
+     * 处理计算出的初始压缩比，得到一个最优压缩比
+     *
+     * @param options
+     * @param minSideLength
+     * @param maxNumOfPixels
+     * @return
+     */
+    public static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
+        int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
+        int roundedSize;
+        if (initialSize <= 8) {
+            roundedSize = 1;
+            while (roundedSize < initialSize) {
+                roundedSize <<= 1;
+            }
+        } else {
+            roundedSize = (initialSize + 7) / 8 * 8;
+        }
+        return roundedSize;
+    }
+
+    /**
+     * 计算初始压缩比
+     *
+     * @param options
+     * @param minSideLength
+     * @param maxNumOfPixels
+     * @return
+     */
+    private static int computeInitialSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
+        double w = options.outWidth;
+        double h = options.outHeight;
+        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
+
+        int upperBound = (minSideLength == -1) ? 128
+                : (int) Math.min(Math.floor(w / minSideLength), Math.floor(h / minSideLength));
+        if (upperBound < lowerBound) {
+            // return the larger one when there is no overlapping zone.
+            return lowerBound;
+        }
+        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
+            return 1;
+        } else if (minSideLength == -1) {
+            return lowerBound;
+        } else {
+            return upperBound;
+
+        }
+    }
+
+    /**
+     * 获取本地图片的旋转角度
+     *
+     * @param path
+     * @return
+     */
+    public static int readNativePictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
+    }
+
 }

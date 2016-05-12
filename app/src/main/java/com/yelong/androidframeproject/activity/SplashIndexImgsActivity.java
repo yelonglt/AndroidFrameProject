@@ -18,16 +18,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.yelong.androidframeproject.R;
-import com.yelong.androidframeproject.model.IndicatorPair;
+import com.yelong.androidframeproject.utils.BitmapUtil;
 import com.yelong.androidframeproject.utils.DensityUtil;
-import com.yelong.androidframeproject.utils.SplashImageUtil;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 引导图页面
+ * 引导图的命名index_0.png,最多支持五张
  * Created by eyetech on 16/4/26.
  */
 public class SplashIndexImgsActivity extends Activity implements View.OnClickListener {
@@ -45,8 +46,6 @@ public class SplashIndexImgsActivity extends Activity implements View.OnClickLis
     private int flaggingWidth;
     private int maxNumOfPixels;
 
-    private DisplayMetrics metrics;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,20 +53,20 @@ public class SplashIndexImgsActivity extends Activity implements View.OnClickLis
 
         initDefImgs();
 
-        metrics = new DisplayMetrics();
+        DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         maxNumOfPixels = metrics.widthPixels * metrics.heightPixels;
 
         mInflater = LayoutInflater.from(this);
         flaggingWidth = metrics.widthPixels / 3;
-        mDetector = new GestureDetector(new GuideViewTouch());
+        mDetector = new GestureDetector(this, new GuideViewTouch());
         findViewById(R.id.splash_skip).setOnClickListener(this);
 
         mSplashPointLayout = (LinearLayout) findViewById(R.id.splash_point_linear);
 
         SplashPagerAdapter adapter = new SplashPagerAdapter();
         mSplashViewPager = (ViewPager) findViewById(R.id.splash_viewpager);
-        mSplashViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mSplashViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
@@ -123,20 +122,23 @@ public class SplashIndexImgsActivity extends Activity implements View.OnClickLis
      */
     private void initDefImgs() {
         defImgs.clear();
-        Class<?> resClzz = R.mipmap.class;
+        Class<?> resCls = R.mipmap.class;
         Integer resId;
         for (int i = 0; i < 5; i++) {
             String id = "index_" + i;
             try {
-                Field field = resClzz.getDeclaredField(id);
+                Field field = resCls.getDeclaredField(id);
                 resId = field.getInt(null);
                 defImgs.add(resId > 0 ? resId : -1);
             } catch (Exception e) {
-                System.out.println("初始化引导图失败");
+                System.out.println("初始化第" + i + "张引导图失败");
             }
         }
     }
 
+    /**
+     * 简单的手势操作类,判断最后一页滑动的距离,滑动距离大于设定值,就跳转到主界面
+     */
     private class GuideViewTouch extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -202,17 +204,16 @@ public class SplashIndexImgsActivity extends Activity implements View.OnClickLis
             ImageView imageView = (ImageView) root.findViewById(R.id.item_splash_img);
             if (indicatorPair.imgCache != null) {
                 try {
-                    imageView.setImageBitmap(
-                            SplashImageUtil.getSmallBitmap(indicatorPair.imgCache.getAbsolutePath(), maxNumOfPixels));
+                    imageView.setImageBitmap(BitmapUtil
+                            .getSmallBitmap(indicatorPair.imgCache.getAbsolutePath(), maxNumOfPixels));
                 } catch (Exception e) {
 
                 }
             }
             if (imageView.getDrawable() == null && indicatorPair.bg != -1) {// 默认图
                 try {
-                    imageView
-                            .setImageBitmap(SplashImageUtil.getSmallBitmap(getResources(), indicatorPair.bg, maxNumOfPixels));
-                    ;
+                    imageView.setImageBitmap(BitmapUtil
+                            .getSmallBitmap(getResources(), indicatorPair.bg, maxNumOfPixels));
                 } catch (Exception e) {
 
                 }
@@ -236,6 +237,36 @@ public class SplashIndexImgsActivity extends Activity implements View.OnClickLis
             }
             imageView.setImageBitmap(null);
             container.removeView(root);
+        }
+    }
+
+    /**
+     * 引导图实体类
+     */
+    public class IndicatorPair {
+        public int bg = -1;
+        public int pos = -1;
+        public String url;
+        public File imgCache;
+
+        public IndicatorPair() {
+        }
+
+        public IndicatorPair(String url, int pos) {
+            this.url = url;
+            this.pos = pos;
+        }
+
+        public IndicatorPair(int bgId, String urlN, int pos) {
+            bg = bgId;
+            url = urlN;
+            this.pos = pos;
+        }
+
+        public IndicatorPair(int bg, int pos, File imgCache) {
+            this.bg = bg;
+            this.pos = pos;
+            this.imgCache = imgCache;
         }
     }
 }

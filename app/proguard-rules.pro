@@ -64,6 +64,20 @@
   public static final android.os.Parcelable$Creator *;
 }
 
+#webview
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.WebView, java.lang.String, android.graphics.Bitmap);
+    public boolean *(android.webkit.WebView, java.lang.String);
+}
+-keepclassmembers class * extends android.webkit.webViewClient {
+    public void *(android.webkit.webView, jav.lang.String);
+}
+#js方法不被混淆
+-keepattributes *Annotation*
+-keepattributes *JavascriptInterface*
+-keep class android.webkit.JavascriptInterface {*;}
+-keep class com.yelong.androidframeproject.web.WebJsInterface {*;}
+
 #gson
 -keepattributes Signature
 -keepattributes *Annotation*

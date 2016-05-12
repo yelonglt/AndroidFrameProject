@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.yelong.androidframeproject.R;
+import com.yelong.androidframeproject.web.WebJsInterface;
 
 import java.util.ArrayList;
 
@@ -144,6 +145,8 @@ public class WebViewActivity extends BaseActivity {
                 }
             }
         });
+
+        mWebView.addJavascriptInterface(new WebJsInterface(), "webjs");
     }
 
     private void initWebSetting() {
