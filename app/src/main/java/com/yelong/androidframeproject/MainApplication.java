@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.yelong.androidframeproject.exception.CrashHandler;
 
 /**
  * Created by eyetech on 16/4/17.
@@ -29,5 +30,8 @@ public class MainApplication extends Application {
         super.onCreate();
         instance = this;
         mRefWatcher = LeakCanary.install(this);
+
+        //收集异常信息
+        CrashHandler.getInstance().init(this);
     }
 }

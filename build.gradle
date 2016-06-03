@@ -8,6 +8,8 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.1.0'
         //EventBus建立索引加速
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        //计算工程的方法数
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.2'
     }
 }
 

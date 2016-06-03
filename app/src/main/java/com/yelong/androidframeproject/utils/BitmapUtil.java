@@ -3,7 +3,9 @@ package com.yelong.androidframeproject.utils;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.media.ExifInterface;
 
 import java.io.File;
@@ -183,7 +185,53 @@ public class BitmapUtil {
         matrix.postRotate(angle);
 
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
-        return Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+        Bitmap newBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
+        if (!bitmap.isRecycled()) bitmap.recycle();
+        if (!scaledBitmap.isRecycled()) scaledBitmap.recycle();
+
+        return newBitmap;
+    }
+
+    /**
+     * 旋转图片到指定的角度
+     *
+     * @param bitmap
+     * @param degree
+     * @return
+     */
+    public static Bitmap rotateBitmap(Bitmap bitmap, final int degree) {
+        if (bitmap == null) return null;
+        if (degree == 0) return bitmap;
+
+        Matrix matrix = new Matrix();
+        matrix.setRotate(degree, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);
+        float targetX, targetY;
+        if (degree == 90) {
+            targetX = bitmap.getHeight();
+            targetY = 0;
+        } else {
+            targetX = bitmap.getHeight();
+            targetY = bitmap.getWidth();
+        }
+
+        final float[] values = new float[9];
+        matrix.getValues(values);
+
+        float x1 = values[Matrix.MTRANS_X];
+        float y1 = values[Matrix.MTRANS_Y];
+
+        matrix.postTranslate(targetX - x1, targetY - y1);
+
+        Bitmap newBitmap = Bitmap.createBitmap(bitmap.getHeight(), bitmap.getWidth(), Bitmap.Config.ARGB_8888);
+
+        Paint paint = new Paint();
+        Canvas canvas = new Canvas(newBitmap);
+        canvas.drawBitmap(bitmap, matrix, paint);
+
+        if (!bitmap.isRecycled()) bitmap.recycle();
+
+        return newBitmap;
     }
 
     /**

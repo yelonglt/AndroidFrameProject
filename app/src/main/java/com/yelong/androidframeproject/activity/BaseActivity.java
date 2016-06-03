@@ -11,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.leakcanary.RefWatcher;
+import com.yelong.androidframeproject.EventBusIndex;
 import com.yelong.androidframeproject.MainApplication;
 import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.utils.DensityUtil;
 import com.yelong.androidframeproject.view.ToolBarHelper;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by eyetech on 16/4/17.
@@ -31,9 +34,15 @@ public class BaseActivity extends AppCompatActivity {
     private TextView mRightTextView;
     private TextView mCenterTextView;
 
+    //使用EventBus传递事件
+    protected EventBus mEventBus = EventBus.builder()
+            .addIndex(new EventBusIndex()).installDefaultEventBus();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mEventBus.register(this);
     }
 
     @Override
@@ -42,6 +51,8 @@ public class BaseActivity extends AppCompatActivity {
         // 使用LeakCanary检测是否有内存泄露
         RefWatcher refWatcher = MainApplication.getRefWatcher(this);
         refWatcher.watch(this);
+
+        mEventBus.unregister(this);
     }
 
     @Override
