@@ -1,4 +1,4 @@
-package com.yelong.androidframeproject.utils;
+package com.yelong.ulibrary;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

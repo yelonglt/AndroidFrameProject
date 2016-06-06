@@ -1,4 +1,4 @@
-package com.yelong.androidframeproject.utils;
+package com.yelong.ulibrary;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.widget.EditText;
  * Created by eyetech on 16/5/26.
  * mail:354734713@qq.com
  */
-public class InputMethodUtils {
+public class InputUtil {
 
     /**
      * 为给定的编辑器开启软键盘

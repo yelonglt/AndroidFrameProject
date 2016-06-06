@@ -1,4 +1,4 @@
-package com.yelong.androidframeproject.utils;
+package com.yelong.ulibrary;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.text.DecimalFormat;
 
-public class NetWorkUtils {
+public class NetworkUtil {
 
     private static final int NETWORK_TYPE_UNAVAILABLE = -1;
     // private static final int NETWORK_TYPE_MOBILE = -100;

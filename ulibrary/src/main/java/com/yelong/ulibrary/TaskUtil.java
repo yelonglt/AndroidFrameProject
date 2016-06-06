@@ -1,4 +1,4 @@
-package com.yelong.androidframeproject.utils;
+package com.yelong.ulibrary;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;

@@ -1,4 +1,4 @@
-package com.yelong.androidframeproject.utils;
+package com.yelong.ulibrary;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.InboxStyle;
 import android.widget.RemoteViews;
 
 /**
@@ -112,7 +111,7 @@ public class NotificationUtil {
 		 * 如果仅仅显示一个图片，使用BigPictureStyle是最方便的； 如果需要显示一个富文本信息，则可以使用BigTextStyle；
 		 * 如果仅仅用于显示一个文本的信息，那么使用InboxStyle即可。
 		 */
-		InboxStyle style = new InboxStyle();
+		NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
 
 		for (String line : lines) {
 			style.addLine(line);

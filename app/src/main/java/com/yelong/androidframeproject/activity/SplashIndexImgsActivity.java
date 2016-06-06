@@ -18,8 +18,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.yelong.androidframeproject.R;
-import com.yelong.androidframeproject.utils.BitmapUtil;
-import com.yelong.androidframeproject.utils.DensityUtil;
+import com.yelong.ulibrary.BitmapUtil;
+import com.yelong.ulibrary.DensityUtil;
 
 import java.io.File;
 import java.lang.reflect.Field;

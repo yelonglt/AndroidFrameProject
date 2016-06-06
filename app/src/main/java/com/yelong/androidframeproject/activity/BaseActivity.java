@@ -14,7 +14,6 @@ import com.squareup.leakcanary.RefWatcher;
 import com.yelong.androidframeproject.EventBusIndex;
 import com.yelong.androidframeproject.MainApplication;
 import com.yelong.androidframeproject.R;
-import com.yelong.androidframeproject.utils.DensityUtil;
 import com.yelong.androidframeproject.view.ToolBarHelper;
 
 import org.greenrobot.eventbus.EventBus;

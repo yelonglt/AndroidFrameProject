@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.event.MessageEvent;
-import com.yelong.androidframeproject.utils.DrawableUtil;
+import com.yelong.ulibrary.DrawableUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
