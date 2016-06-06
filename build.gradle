@@ -10,6 +10,9 @@ buildscript {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         //计算工程的方法数
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.5.2'
+        //上传library到jcenter
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
     }
 }
 
