@@ -1,15 +1,18 @@
 package com.yelong.androidframeproject.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.yelong.androidframeproject.EventBusIndex;
 import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.event.MessageEvent;
+import com.yelong.androidframeproject.login.LoginInterceptor;
 import com.yelong.ulibrary.DrawableUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -18,20 +21,23 @@ public class MainActivity extends BaseActivity {
     private TextView tvMessage;
     private ImageView mImageView;
 
+    //使用EventBus传递事件
+    private EventBus mEventBus = EventBus.builder()
+            .addIndex(new EventBusIndex()).installDefaultEventBus();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setToolbarTitle("主界面");
+        mEventBus.register(this);
 
         tvMessage = (TextView) findViewById(R.id.message);
 
         setRightButtonVisible("测试", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-                startActivity(intent);
+                gotoWebViewActivity();
             }
         });
 
@@ -42,6 +48,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mEventBus.unregister(this);
     }
 
     //EventBus.getDefault().post(new MessageEvent("你在干嘛呢？"));
@@ -71,5 +78,18 @@ public class MainActivity extends BaseActivity {
         System.out.println("onAsyncEvent == " + event.getMessage());
         //tvMessage.setText(event.getMessage());
         //强制在后台线程中执行
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //所有的View都不处理事件，事件最终会传递到这里
+        return super.onTouchEvent(event);
+    }
+
+    /**
+     * 跳转WebViewActivity
+     */
+    private void gotoWebViewActivity() {
+        LoginInterceptor.interceptor(this, "activity.WebViewActivity", null);
     }
 }

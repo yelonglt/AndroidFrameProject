@@ -31,8 +31,18 @@
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"/>
 
+        <!--Activity隐式启动-->
         <activity
             android:name=".activity.WebViewActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="activity.WebViewActivity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"/>
     </application>
 

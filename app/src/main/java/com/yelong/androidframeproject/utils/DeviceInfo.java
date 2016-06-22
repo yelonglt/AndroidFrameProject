@@ -77,7 +77,7 @@ public class DeviceInfo {
         try {
             return getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            return 0;
+            return 1;
         }
     }
 

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">东方美食</string>
+    <string name="login">登 录</string>
 </resources>
