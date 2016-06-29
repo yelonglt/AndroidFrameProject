@@ -1,5 +1,6 @@
 package com.yelong.androidframeproject.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,7 +38,9 @@ public class MainActivity extends BaseActivity {
         setRightButtonVisible("测试", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gotoWebViewActivity();
+                //gotoWebViewActivity();
+                Intent intent =new Intent(MainActivity.this,TestActivity.class);
+                startActivity(intent);
             }
         });
 

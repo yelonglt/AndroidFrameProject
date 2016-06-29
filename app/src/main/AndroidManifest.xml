@@ -44,6 +44,12 @@
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activity.ScrollerActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.TestActivity"/>
     </application>
 
 </manifest>
