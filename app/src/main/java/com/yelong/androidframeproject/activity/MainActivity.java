@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
         mImageView = (ImageView) findViewById(R.id.tintImage);
         mImageView.setImageDrawable(DrawableUtil.getStateDrawable(this, R.mipmap.ic_launcher, R.color.colorNormalAccent, R.color.colorAccent));
 
-        OkHttpClientManager.getAsyn("https://kyfw.12306.cn/otn/", new OkHttpClientManager.ResultCallback<String>() {
+        OkHttpClientManager.getAsyn("https://api.github.com", new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 System.out.println("fail == " + e.toString());
