@@ -24,9 +24,16 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.FileNameMap;
 import java.net.URLConnection;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.CertificateFactory;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 import okhttp3.Cache;
 import okhttp3.Call;
@@ -39,6 +46,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.internal.platform.Platform;
 
 /**
  * OkHttpClient请求统一管理类
@@ -49,6 +57,7 @@ public class OkHttpClientManager {
     public static final String TAG = OkHttpClientManager.class.getSimpleName();
 
     private static OkHttpClient mOkHttpClient;
+    private static OkHttpClient.Builder builder;
     private Handler mDelivery;
     private Gson mGson;
 
@@ -61,7 +70,7 @@ public class OkHttpClientManager {
      * @param isLogger    是否设置显示log信息
      */
     public static void init(Context context, boolean shouldCache, boolean isCookie, boolean isLogger) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder = new OkHttpClient.Builder();
         //设置缓存
         if (shouldCache) {
             File cacheDir;
@@ -74,28 +83,64 @@ public class OkHttpClientManager {
             int cacheSize = 10 * 1024 * 1024;
             Cache cache = new Cache(cacheDir, cacheSize);
             builder.cache(cache);
+            builder.addInterceptor(new CacheInterceptor());
         }
         //设置Cookie
         if (isCookie) {
             builder.cookieJar(new CookiesManager());
         }
 
-        mOkHttpClient = builder.connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .build();
-        if (shouldCache) {
-            mOkHttpClient.interceptors().add(new CacheInterceptor());
-        }
+        //设置显示log信息
         if (isLogger) {
-            mOkHttpClient.interceptors().add(new LoggerInterceptor(TAG, true));
+            builder.addInterceptor(new LoggerInterceptor(TAG, true));
+        }
+    }
+
+    /**
+     * 设置证书,因为有些网站必须有签名证书才能访问
+     *
+     * @param certificates
+     * @return
+     */
+    public static void setCertificates(InputStream... certificates) {
+        try {
+            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            //KeyStore keyStore = KeyStore.getInstance("PKCS12", "BC");
+            keyStore.load(null, null);
+
+            int index = 0;
+            for (InputStream certificate : certificates) {
+                String certificateAlias = Integer.toString(index++);
+                keyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(certificate));
+                if (certificate != null) {
+                    certificate.close();
+                }
+            }
+
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+
+            TrustManagerFactory trustManagerFactory =
+                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+
+            trustManagerFactory.init(keyStore);
+            sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
+
+            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            builder.sslSocketFactory(sslSocketFactory, Platform.get().trustManager(sslSocketFactory));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private OkHttpClientManager() {
-        if (mOkHttpClient == null){
-           throw  new ExceptionInInitializerError("OkHttpClientManager no instantiated");
+        if (builder == null) {
+            //没有初始化给个默认的
+            builder = new OkHttpClient.Builder();
         }
+        mOkHttpClient = builder.connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS).build();
         mDelivery = new Handler(Looper.getMainLooper());
         mGson = new Gson();
     }

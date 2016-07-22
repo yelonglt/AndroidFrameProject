@@ -11,11 +11,14 @@ import com.yelong.androidframeproject.EventBusIndex;
 import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.event.MessageEvent;
 import com.yelong.androidframeproject.login.LoginInterceptor;
+import com.yelong.androidframeproject.net.OkHttpClientManager;
 import com.yelong.ulibrary.DrawableUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import okhttp3.Request;
 
 public class MainActivity extends BaseActivity {
 
@@ -39,13 +42,25 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //gotoWebViewActivity();
-                Intent intent =new Intent(MainActivity.this,TestActivity.class);
+                Intent intent = new Intent(MainActivity.this, TestActivity.class);
                 startActivity(intent);
             }
         });
 
         mImageView = (ImageView) findViewById(R.id.tintImage);
         mImageView.setImageDrawable(DrawableUtil.getStateDrawable(this, R.mipmap.ic_launcher, R.color.colorNormalAccent, R.color.colorAccent));
+
+        OkHttpClientManager.getAsyn("https://kyfw.12306.cn/otn/", new OkHttpClientManager.ResultCallback<String>() {
+            @Override
+            public void onError(Request request, Exception e) {
+                System.out.println("fail == " + e.toString());
+            }
+
+            @Override
+            public void onResponse(String response) {
+                System.out.println("success==" + response);
+            }
+        });
     }
 
     @Override
