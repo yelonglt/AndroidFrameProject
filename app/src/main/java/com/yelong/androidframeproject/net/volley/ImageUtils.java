@@ -1,4 +1,4 @@
-package com.yelong.androidframeproject.net;
+package com.yelong.androidframeproject.net.volley;
 
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
