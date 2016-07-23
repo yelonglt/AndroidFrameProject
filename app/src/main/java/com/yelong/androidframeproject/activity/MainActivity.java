@@ -12,11 +12,16 @@ import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.event.MessageEvent;
 import com.yelong.androidframeproject.login.LoginInterceptor;
 import com.yelong.androidframeproject.net.OkHttpClientManager;
+import com.yelong.androidframeproject.view.UpMarqueeView;
 import com.yelong.ulibrary.DrawableUtil;
+import com.yelong.ulibrary.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Request;
 
@@ -24,6 +29,7 @@ public class MainActivity extends BaseActivity {
 
     private TextView tvMessage;
     private ImageView mImageView;
+    private UpMarqueeView mMarqueeView;
 
     //使用EventBus传递事件
     private EventBus mEventBus = EventBus.builder()
@@ -61,6 +67,29 @@ public class MainActivity extends BaseActivity {
                 System.out.println("success==" + response);
             }
         });
+
+        mMarqueeView = (UpMarqueeView) findViewById(R.id.today_headlines);
+        mMarqueeView.setData(initData());
+        mMarqueeView.setOnItemClickListener(new UpMarqueeView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, String item) {
+                ToastUtil.showShort(MainActivity.this, "你点击了==" + item);
+            }
+        });
+    }
+
+    /**
+     * 初始化数据
+     */
+    private List<String> initData() {
+        List<String> data = new ArrayList<>();
+        data.add("家人给2岁孩子喝这个，孩子智力倒退10岁!!!");
+        data.add("iPhone8最感人变化成真，必须买买买买!!!!");
+        data.add("简直是白菜价！日本玩家33万甩卖15万张游戏王卡");
+        data.add("iPhone7价格曝光了！看完感觉我的腰子有点疼...");
+        data.add("主人内疚逃命时没带够，回废墟狂挖30小时！");
+//        data.add("竟不是小米乐视！看水抢了骁龙821首发了！！！");
+        return data;
     }
 
     @Override

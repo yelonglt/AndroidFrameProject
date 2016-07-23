@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="UpMarqueeView">
+        <!--页面切换间隔-->
+        <attr name="flipInterval" format="integer"/>
+        <!--动画变化时间-->
+        <attr name="animDuration" format="integer"/>
+    </declare-styleable>
+</resources>

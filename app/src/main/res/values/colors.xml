@@ -7,4 +7,5 @@
     <color name="colorTitle">@android:color/white</color>
 
     <color name="colorNormalAccent">#66FF4081</color>
+    <color name="colorMarqueeRed">#FFBE002F</color>
 </resources>
