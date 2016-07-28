@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -103,5 +104,24 @@ public class IntentUtil {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(intent);
+    }
+
+    /**
+     * 发送短信
+     *
+     * @param context
+     * @param phoneNumber
+     * @param content
+     */
+    public static void sendSms(Context context, String phoneNumber, String content) {
+
+        Uri uri = Uri.parse("smsto:" + (TextUtils.isEmpty(phoneNumber) ? "" : phoneNumber));
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+
+        intent.putExtra("sms_body", TextUtils.isEmpty(content) ? "" : content);
+
+        context.startActivity(intent);
+
     }
 }
