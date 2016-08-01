@@ -6,4 +6,10 @@ package com.dmall.mvp.pages;
  */
 public interface BaseView<T> {
 
+    void showLoadingDialog();
+
+    void hideLoadingDialog();
+
+    //void setPresenter(T presenter);
+
 }

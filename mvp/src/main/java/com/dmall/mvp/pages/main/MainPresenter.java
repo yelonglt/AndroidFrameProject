@@ -15,7 +15,6 @@ import rx.schedulers.Schedulers;
  */
 public class MainPresenter implements MainContract.Presenter {
 
-
     public MainContract.View mainView;
 
     public TaskManager mManager;

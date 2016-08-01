@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.yelong.androidframeproject.view.ScrollerLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <Button android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="this is first view"/>
+
+        <Button android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="this is second view"/>
+
+        <Button android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="this is third view"/>
+
+    </com.yelong.androidframeproject.view.ScrollerLayout>
 
     <RelativeLayout
-        android:gravity="center"
         android:id="@+id/main_area"
         android:layout_width="300dp"
         android:layout_height="110dp"
         android:layout_centerInParent="true"
-        android:background="#ff0000">
+        android:background="#ff0000"
+        android:gravity="center">
 
         <TextView
             android:layout_width="150dp"

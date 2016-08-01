@@ -36,5 +36,7 @@ public class MainApplication extends Application {
         CrashHandler.getInstance().init(this);
         //初始化OkHttp
         OkHttpClientManager.init(this, true, false, true);
+        //OkHttpClientManager.setCertificates(getAssets().open("srca.cer"));
+        //OkHttpClientManager.setCertificates(getResources().openRawResource(R.raw.srca));
     }
 }

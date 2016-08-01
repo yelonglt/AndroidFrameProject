@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //gotoWebViewActivity();
-                Intent intent = new Intent(MainActivity.this, TestActivity.class);
+                Intent intent = new Intent(MainActivity.this, DragActivity.class);
                 startActivity(intent);
             }
         });
@@ -56,6 +56,19 @@ public class MainActivity extends BaseActivity {
         mImageView = (ImageView) findViewById(R.id.tintImage);
         mImageView.setImageDrawable(DrawableUtil.getStateDrawable(this, R.mipmap.ic_launcher, R.color.colorNormalAccent, R.color.colorAccent));
 
+        testOkHttp();
+
+        mMarqueeView = (UpMarqueeView) findViewById(R.id.today_headlines);
+        mMarqueeView.setData(initData());
+        mMarqueeView.setOnItemClickListener(new UpMarqueeView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, String item) {
+                ToastUtil.showShort(MainActivity.this, "你点击了==" + item);
+            }
+        });
+    }
+
+    public void testOkHttp() {
         OkHttpClientManager.getAsyn("https://api.github.com", new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
@@ -65,15 +78,6 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onResponse(String response) {
                 System.out.println("success==" + response);
-            }
-        });
-
-        mMarqueeView = (UpMarqueeView) findViewById(R.id.today_headlines);
-        mMarqueeView.setData(initData());
-        mMarqueeView.setOnItemClickListener(new UpMarqueeView.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, String item) {
-                ToastUtil.showShort(MainActivity.this, "你点击了==" + item);
             }
         });
     }
