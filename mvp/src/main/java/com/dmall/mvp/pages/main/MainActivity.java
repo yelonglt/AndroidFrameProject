@@ -1,51 +1,22 @@
 package com.dmall.mvp.pages.main;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.TextView;
+import android.support.annotation.Nullable;
 
-import com.dmall.mvp.R;
-import com.dmall.mvp.pages.login.LoginActivity;
+import com.dmall.mvp.base.AppActivity;
+import com.dmall.mvp.base.BaseFragment;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
-
-    private MainContract.Presenter mPresenter = new MainPresenter(this);
-
-    private TextView mTextView;
+public class MainActivity extends AppActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mTextView = (TextView) findViewById(R.id.message_content);
-
-        mPresenter.getString();
-
-        mTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     @Override
-    public void showString(String content) {
-        mTextView.setText(content);
-    }
-
-    @Override
-    public void showLoadingDialog() {
-
-    }
-
-    @Override
-    public void hideLoadingDialog() {
-
+    protected BaseFragment getFirstFragment() {
+        MainFragment mainFragment = new MainFragment();
+        new MainPresenter(mainFragment);
+        return mainFragment;
     }
 }

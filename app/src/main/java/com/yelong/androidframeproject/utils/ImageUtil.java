@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.yelong.androidframeproject.MainApplication;
-import com.yelong.ulibrary.MD5Util;
+import com.yelong.ulibrary.EncryptUtil;
 import com.yelong.ulibrary.cache.DiskLruCache;
 import com.yelong.ulibrary.cache.MemoryCache;
 
@@ -57,10 +57,10 @@ public class ImageUtil {
      * @param url
      * @return
      */
-    public Bitmap getBitmap(String url) {
+    public Bitmap getBitmap(String url) throws Exception {
         Bitmap bitmap = mMemoryCache.getBitmapToMemoryCache(url);
         if (bitmap == null) {
-            String key = MD5Util.md5(url);
+            String key = EncryptUtil.encryptMD5To32(url);
             try {
                 if (mDiskLruCache.get(key) != null) {
                     // 从DiskLruCahce取
@@ -93,11 +93,11 @@ public class ImageUtil {
      * @param url
      * @param bitmap
      */
-    public void putBitmapToMemoryAndDiskCache(String url, Bitmap bitmap) {
+    public void putBitmapToMemoryAndDiskCache(String url, Bitmap bitmap) throws Exception {
         // 存入LruCache缓存
         mMemoryCache.addBitmapToMemoryCache(url, bitmap);
         // 判断是否存在DiskLruCache缓存，若没有存入
-        String key = MD5Util.md5(url);
+        String key = EncryptUtil.encryptMD5To32(url);
         try {
             if (mDiskLruCache.get(key) == null) {
                 DiskLruCache.Editor editor = mDiskLruCache.edit(key);

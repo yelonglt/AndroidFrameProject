@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.dmall.mvp.R;
 import com.dmall.mvp.base.BaseFragment;
 import com.dmall.mvp.dto.User;
+import com.google.common.base.Preconditions;
 
 /**
  * 登录页面
@@ -80,7 +81,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresenter = new LoginPresenter(this);
     }
 
     @Override
@@ -111,5 +111,10 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     @Override
     public void hideLoadingDialog() {
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mPresenter = Preconditions.checkNotNull(presenter);
     }
 }

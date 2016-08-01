@@ -107,6 +107,17 @@ public class IntentUtil {
     }
 
     /**
+     * 打开指定包名的App
+     */
+    public static void openApp(Context context, String packageName) {
+        PackageManager manager = context.getPackageManager();
+        Intent intent = manager.getLaunchIntentForPackage(packageName);
+        if (intent != null) {
+            context.startActivity(intent);
+        }
+    }
+
+    /**
      * 发送短信
      *
      * @param context

@@ -2,6 +2,7 @@ package com.dmall.mvp.pages.main;
 
 import com.dmall.mvp.business.TaskDataSourceImpl;
 import com.dmall.mvp.business.TaskManager;
+import com.google.common.base.Preconditions;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -15,13 +16,15 @@ import rx.schedulers.Schedulers;
  */
 public class MainPresenter implements MainContract.Presenter {
 
-    public MainContract.View mainView;
+    public MainContract.View mMainView;
 
     public TaskManager mManager;
 
     public MainPresenter(MainContract.View mainView) {
-        this.mainView = mainView;
+        mMainView = Preconditions.checkNotNull(mainView);
+        mMainView.setPresenter(this);
         mManager = new TaskManager(new TaskDataSourceImpl());
+
     }
 
 
@@ -48,7 +51,7 @@ public class MainPresenter implements MainContract.Presenter {
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        mainView.showString(s);
+                        mMainView.showString(s);
                     }
                 });
 

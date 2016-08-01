@@ -5,4 +5,7 @@ package com.dmall.mvp.pages;
  * mail:354734713@qq.com
  */
 public interface BasePresenter {
+
+    //void start();
+
 }

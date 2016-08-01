@@ -10,6 +10,6 @@ public interface BaseView<T> {
 
     void hideLoadingDialog();
 
-    //void setPresenter(T presenter);
+    void setPresenter(T presenter);
 
 }
