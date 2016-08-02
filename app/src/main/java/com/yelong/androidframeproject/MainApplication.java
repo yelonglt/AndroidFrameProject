@@ -38,5 +38,11 @@ public class MainApplication extends Application {
         OkHttpClientManager.init(this, true, false, true);
         //OkHttpClientManager.setCertificates(getAssets().open("srca.cer"));
         //OkHttpClientManager.setCertificates(getResources().openRawResource(R.raw.srca));
+
+        setDoorState(AppConstants.STATE_OPEN);
+    }
+
+    public void setDoorState(@AppConstants.DoorState int state) {
+
     }
 }
