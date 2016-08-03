@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/app_name"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/item0"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="唐三藏"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/item1"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="孙悟空"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/item2"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="猪八戒"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/item3"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="沙和尚"
+        app:showAsAction="never"/>
+</menu>

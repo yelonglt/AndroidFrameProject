@@ -11,6 +11,9 @@ public class MainActivity extends AppActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mToolbar.setTitle("Main");
+        //不重新设置导致设置失效
+        setSupportActionBar(mToolbar);
     }
 
     @Override

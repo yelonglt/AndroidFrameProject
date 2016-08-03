@@ -1,27 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
+    <!--自定义toolbar样式-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!--设置状态栏的颜色-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <!-- 窗口的背景颜色 -->
+        <item name="android:windowBackground">@android:color/white</item>
 
         <!-- 溢出菜单 -->
-        <item name="actionOverflowMenuStyle">@style/ToolBar.OverflowMenuStyle</item>
-
+        <item name="android:actionOverflowMenuStyle">@style/ToolBar.OverflowMenuStyle</item>
         <!-- 用于修改item默认的分割线-->
-        <item name="dropDownListViewStyle">@style/ToolBar.DropDownStyle</item>
+        <item name="android:dropDownListViewStyle">@style/ToolBar.DropDownStyle</item>
     </style>
 
     <!-- 溢出菜单样式 -->
     <style name="ToolBar.OverflowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
         <!-- 是否覆盖锚点，默认为true，即盖住Toolbar -->
         <item name="overlapAnchor">false</item>
+        <item name="android:overlapAnchor">false</item>
         <item name="android:textColorPrimary">@android:color/holo_red_light</item>
         <item name="android:popupBackground">@color/colorPrimary</item>
         <item name="android:dropDownVerticalOffset">5dp</item>
-        <item name="android:dropDownHorizontalOffset">-1dp</item>
     </style>
 
     <!--用于修改popmenu的分割线-->
@@ -30,4 +34,5 @@
         <item name="android:divider">#908d8d8d</item>
         <item name="android:dividerHeight">1dp</item>
     </style>
+
 </resources>
