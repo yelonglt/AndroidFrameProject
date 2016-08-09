@@ -54,6 +54,7 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.TestActivity"/>
+        <activity android:name=".activity.MineActivity"/>
     </application>
 
 </manifest>

@@ -31,9 +31,21 @@ public class MainFragment extends BaseFragment implements MainContract.View {
         mTextView = (TextView) view.findViewById(R.id.message_content);
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            loadData();
+        }
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (getUserVisibleHint()) {
+            loadData();
+        }
 
         mPresenter.getString();
 
@@ -48,6 +60,13 @@ public class MainFragment extends BaseFragment implements MainContract.View {
                 addFragment(loginFragment);*/
             }
         });
+    }
+
+    /**
+     * 加载数据
+     */
+    private void loadData() {
+
     }
 
     @Override

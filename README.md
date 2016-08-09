@@ -6,3 +6,14 @@
      2.执行gradle install
      3.执行gradle bintrayUpload
 
+
+#删除重复依赖
+      compile('com.alibaba:fastjson:1.2.15') {
+          exclude module: 'fastjson', group: 'com.alibaba'
+      }
+      compile('org.springframework.boot:spring-boot-starter:1.4.0.RELEASE') {
+          exclude module: 'org.springframework.boot:spring-boot-starter-logging'
+      }
+
+#
+
