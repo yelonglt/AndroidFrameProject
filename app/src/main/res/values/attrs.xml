@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="WaveLoadingView">
+        <attr name="wlvTextColor" format="color"/>
+        <attr name="wlvTextSize" format="dimension"/>
+        <attr name="wlvWaveWidth" format="dimension"/>
+        <attr name="wlvWaveHeight" format="dimension"/>
+        <attr name="wlvWaveColor" format="color"/>
+        <attr name="wlvWaveBgColor" format="color"/>
+    </declare-styleable>
+
+</resources>

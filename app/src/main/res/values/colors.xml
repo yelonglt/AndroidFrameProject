@@ -8,4 +8,9 @@
 
     <color name="colorNormalAccent">#66FF4081</color>
     <color name="colorMarqueeRed">#FFBE002F</color>
+
+    <!-- 水波纹的颜色-->
+    <color name="colorWave">#8800ff66</color>
+    <!-- 水波纹背景颜色-->
+    <color name="colorWaveBg">#88dddddd</color>
 </resources>

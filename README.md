@@ -6,6 +6,8 @@
      2.执行gradle install
      3.执行gradle bintrayUpload
 
+#mvp项目
+     是仿造google的mvp示例编写的
 
 #删除重复依赖
       compile('com.alibaba:fastjson:1.2.15') {
