@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 /**
- * 可以拖动的Layout
+ * 可以拖动的Layout,用ViewDragHelper实现的
  * Created by yelong on 16/8/1.
  * mail:354734713@qq.com
  */
@@ -62,6 +62,8 @@ public class DragLayout extends LinearLayout {
                     mDragHelper.settleCapturedViewAt(mAutoBackOriginPos.x, mAutoBackOriginPos.y);
                     invalidate();
                 }
+
+                printParams();
             }
 
             //在边界拖动时回调
@@ -71,6 +73,18 @@ public class DragLayout extends LinearLayout {
             }
         });
         mDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_LEFT);
+    }
+
+    private void printParams() {
+        System.out.println("left == " + mDragView.getLeft());
+        System.out.println("right == " + mDragView.getRight());
+        System.out.println("top == " + mDragView.getTop());
+        System.out.println("bottom == " + mDragView.getBottom());
+
+        System.out.println("x == " + mDragView.getX());
+        System.out.println("y == " + mDragView.getY());
+        System.out.println("translationX == " + mDragView.getTranslationX());
+        System.out.println("translationY == " + mDragView.getTranslationY());
     }
 
     @Override

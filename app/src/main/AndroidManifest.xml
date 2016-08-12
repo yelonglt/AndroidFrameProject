@@ -55,6 +55,7 @@
 
         <activity android:name=".activity.TestActivity"/>
         <activity android:name=".activity.MineActivity"/>
+        <activity android:name=".activity.EventConflictActivity"/>
     </application>
 
 </manifest>

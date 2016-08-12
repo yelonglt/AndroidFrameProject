@@ -18,4 +18,8 @@ public class AppConstants {
     public @interface DoorState {
     }
 
+    public void setDoorState(@AppConstants.DoorState int state) {
+
+    }
+
 }
