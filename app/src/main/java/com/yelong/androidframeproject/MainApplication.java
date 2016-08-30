@@ -8,6 +8,8 @@ import com.squareup.leakcanary.RefWatcher;
 import com.yelong.androidframeproject.exception.CrashHandler;
 import com.yelong.androidframeproject.net.OkHttpClientManager;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by eyetech on 16/4/17.
  */
@@ -24,6 +26,18 @@ public class MainApplication extends Application {
     public static RefWatcher getRefWatcher(Context context) {
         MainApplication application = (MainApplication) context.getApplicationContext();
         return application.mRefWatcher;
+    }
+
+    //获取App全局唯一的EventBus实例
+    private static EventBus mEventBus;
+
+    public static EventBus getEventBus() {
+        if (mEventBus == null) {
+            mEventBus = EventBus.builder()
+                    .throwSubscriberException(BuildConfig.DEBUG)
+                    .addIndex(new EventBusIndex()).installDefaultEventBus();
+        }
+        return mEventBus;
     }
 
     @Override

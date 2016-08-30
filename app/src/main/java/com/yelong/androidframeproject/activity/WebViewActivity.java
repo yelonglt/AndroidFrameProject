@@ -1,5 +1,6 @@
 package com.yelong.androidframeproject.activity;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,22 +8,31 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.web.WebJsInterface;
+import com.yelong.androidframeproject.web.https.SSLSocketFactoryHelper;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by eyetech on 16/5/4.
  * mail:354734713@qq.com
  */
 public class WebViewActivity extends BaseActivity {
+    public static final String TAG = "WebViewActivity";
 
     private WebView mWebView;
 
@@ -36,7 +46,7 @@ public class WebViewActivity extends BaseActivity {
     private ArrayList<String> loadHistoryUrls = new ArrayList<>();
 
     //初始化的页面
-    private String defaultUrl = "http://www.baidu.com";
+    private String defaultUrl = "https://www.github.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,7 @@ public class WebViewActivity extends BaseActivity {
         mWebView.loadUrl(defaultUrl);
 
         mWebView.setWebViewClient(new WebViewClient() {
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 //url是电话 就直接拨打
@@ -84,6 +95,65 @@ public class WebViewActivity extends BaseActivity {
                     }
                 }
                 super.onPageFinished(view, url);
+            }
+
+            /**
+             * 拦截https请求
+             */
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                String url = request.getUrl().toString();
+                if (url.contains("https") && url.contains("dmall.com")) {
+                    return processHttpsRequest(request.getUrl());
+                }
+                return super.shouldInterceptRequest(view, request);
+            }
+
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                if (url.contains("https") && url.contains("dmall.com")) {
+                    return processHttpsRequest(Uri.parse(url));
+                }
+                return super.shouldInterceptRequest(view, url);
+            }
+
+            /**
+             * 拦截https的url
+             *
+             * @param uri
+             * @return
+             */
+            private WebResourceResponse processHttpsRequest(Uri uri) {
+                Log.e(TAG, "intercept url == " + uri.toString());
+
+                try {
+                    URL url = new URL(uri.toString());
+                    HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                    urlConnection.setSSLSocketFactory(SSLSocketFactoryHelper.newSslSocketFactory(WebViewActivity.this, R.raw.client));
+
+                    InputStream is = urlConnection.getInputStream();
+                    String contentType = urlConnection.getContentType();
+                    String encoding = urlConnection.getContentEncoding();
+
+                    // If got a contentType header
+                    if (contentType != null) {
+                        String mimeType = contentType;
+                        // Parse mime type from contenttype string
+                        if (contentType.contains(";")) {
+                            mimeType = contentType.split(";")[0].trim();
+                        }
+                        Log.e(TAG, "Intercept Url Mime: " + mimeType);
+                        // Return the response
+                        return new WebResourceResponse(mimeType, encoding, is);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "intercept url error == " + e.getLocalizedMessage());
+                    return new WebResourceResponse(null, null, null);
+                }
+                // Return empty response for this request
+                return new WebResourceResponse(null, null, null);
             }
         });
 

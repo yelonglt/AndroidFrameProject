@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.yelong.androidframeproject.EventBusIndex;
+import com.yelong.androidframeproject.MainApplication;
 import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.event.MessageEvent;
 import com.yelong.androidframeproject.login.LoginInterceptor;
@@ -16,7 +16,6 @@ import com.yelong.androidframeproject.view.UpMarqueeView;
 import com.yelong.ulibrary.DrawableUtil;
 import com.yelong.ulibrary.ToastUtil;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -31,16 +30,12 @@ public class MainActivity extends BaseActivity {
     private ImageView mImageView;
     private UpMarqueeView mMarqueeView;
 
-    //使用EventBus传递事件
-    private EventBus mEventBus = EventBus.builder()
-            .addIndex(new EventBusIndex()).installDefaultEventBus();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setToolbarTitle("主界面");
-        mEventBus.register(this);
+        MainApplication.getEventBus().register(this);
 
         tvMessage = (TextView) findViewById(R.id.message);
 
@@ -48,7 +43,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //gotoWebViewActivity();
-                Intent intent = new Intent(MainActivity.this, EventConflictActivity.class);
+                Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
                 startActivity(intent);
             }
         });
@@ -99,7 +94,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mEventBus.unregister(this);
+        System.out.println("MainActivity onDestroy");
+        MainApplication.getEventBus().unregister(this);
     }
 
     //EventBus.getDefault().post(new MessageEvent("你在干嘛呢？"));
