@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/activity_vertical_margin"
@@ -24,6 +24,20 @@
         android:layout_centerInParent="true"
         android:text="to event"/>
 
+
+    <com.yelong.androidframeproject.view.ShadowCircleImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/go_event"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_launcher"
+        app:sivBorderWidth="2dp"
+        app:sivBorderColor="@color/colorAccent"
+        app:sivShadowColor="@android:color/black"
+        app:sivShadowDx="0dp"
+        app:sivShadowDy="1dp"
+        app:sivShadowRadius="1dp"/>
+
     <ImageView
         android:id="@+id/tintImage"
         android:layout_width="wrap_content"
@@ -34,10 +48,10 @@
 
     <com.yelong.androidframeproject.view.UpMarqueeView
         android:id="@+id/today_headlines"
-        app:flipInterval="4000"
-        app:animDuration="1000"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        app:animDuration="1000"
+        app:flipInterval="4000"/>
 </RelativeLayout>

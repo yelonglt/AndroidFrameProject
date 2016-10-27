@@ -10,4 +10,26 @@
         <attr name="wlvWaveBgColor" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="CircleImageView">
+        <attr name="civBorderWidth" format="dimension"/>
+        <attr name="civBorderColor" format="color"/>
+        <attr name="civBorderOverlay" format="boolean"/>
+        <attr name="civFillColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="ShadowCircleImageView">
+        <!-- The width of border -->
+        <attr name="sivBorderWidth" format="dimension"/>
+        <!-- The color of border -->
+        <attr name="sivBorderColor" format="color"/>
+        <!-- The radius of shadow -->
+        <attr name="sivShadowRadius" format="dimension"/>
+        <!-- Horizontal shadow offset -->
+        <attr name="sivShadowDx" format="dimension"/>
+        <!-- Vertical shadow offset -->
+        <attr name="sivShadowDy" format="dimension"/>
+        <!-- The color of shadow -->
+        <attr name="sivShadowColor" format="color"/>
+    </declare-styleable>
+
 </resources>
