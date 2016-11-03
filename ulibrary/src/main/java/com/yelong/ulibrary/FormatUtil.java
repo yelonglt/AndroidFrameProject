@@ -9,32 +9,34 @@ import java.text.DecimalFormat;
  */
 public class FormatUtil {
 
+    private static final long K = 1024;
+    private static final long M = K * K;
+    private static final long G = K * K * K;
+    private static final long T = K * K * K * K;
+
+
     /**
      * 返回byte的数据大小对应的文本
      *
-     * @param size
-     * @return
+     * @param size 数据大小
+     * @return 格式化的字符串
      */
     public static String getDataSize(long size) {
         if (size < 0) {
             size = 0;
         }
         DecimalFormat format = new DecimalFormat("####.00");
-        if (size < 1024) {
+        if (size < K) {
             return size + "bytes";
-        } else if (size < 1024 * 1024) {
-            float kbsize = size / 1024f;
-            return format.format(kbsize) + "KB";
-        } else if (size < 1024 * 1024 * 1024) {
-            float mbsize = size / 1024f / 1024f;
-            return format.format(mbsize) + "MB";
-        } else if (size < 1024 * 1024 * 1024 * 1024) {
-            float gbsize = size / 1024f / 1024f / 1024f;
-            return format.format(gbsize) + "GB";
+        } else if (size < M) {
+            return format.format(size / 1024f) + "KB";
+        } else if (size < G) {
+            return format.format(size / 1024f / 1024f) + "MB";
+        } else if (size < T) {
+            return format.format(size / 1024f / 1024f / 1024f) + "GB";
         } else {
             return "size: error";
         }
-
     }
 
     /**
@@ -44,9 +46,6 @@ public class FormatUtil {
      * @return
      */
     public static String getKBDataSize(long size) {
-        if (size < 0) {
-            size = 0;
-        }
         return getDataSize(size * 1024);
     }
 
