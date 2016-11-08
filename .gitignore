@@ -1,11 +1,8 @@
 .gradle
 .idea
 .DS_Store
-/build
+build/
 /local.properties
 /settings.gradle
 /captures
 *.iml
-/app/build
-/mvp/build
-/ulibrary/build
