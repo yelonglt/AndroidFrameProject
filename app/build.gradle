@@ -64,14 +64,14 @@ android {
         ignoreWarnings true
     }
 
-    dexOptions {
+    /*dexOptions {
         incremental true //如果开启multi-dex, 此句无效
         preDexLibraries true
         javaMaxHeapSize "2g" //最主要是这句, 不过改成8g没有更显著的提升
         //jumboMode true
         //threadCount 8 //gradle输就输在了并行上, 都是串行, 增加线程数没鸟用
         //maxProcessCount 8 //com.android.tools.build:gradle:2.0.0
-    }
+    }*/
 }
 
 tasks.whenTaskAdded { task ->
