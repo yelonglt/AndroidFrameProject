@@ -18,9 +18,10 @@
 
 
     <Button
-        android:id="@+id/go_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:id="@+id/center_btn"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
         android:layout_centerInParent="true"
         android:text="to event"/>
 
@@ -28,11 +29,11 @@
     <com.yelong.androidframeproject.view.ShadowCircleImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/go_event"
+        android:layout_below="@id/center_btn"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
-        app:sivBorderWidth="2dp"
+        android:src="@mipmap/splash_bg"
         app:sivBorderColor="@color/colorAccent"
+        app:sivBorderWidth="2dp"
         app:sivShadowColor="@android:color/black"
         app:sivShadowDx="0dp"
         app:sivShadowDy="1dp"
@@ -42,7 +43,7 @@
         android:id="@+id/tintImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/go_event"
+        android:layout_below="@+id/center_btn"
         android:layout_marginTop="20dp"
         android:clickable="true"/>
 

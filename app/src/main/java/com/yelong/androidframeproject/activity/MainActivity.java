@@ -1,9 +1,12 @@
 package com.yelong.androidframeproject.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +18,8 @@ import com.yelong.androidframeproject.net.OkHttpClientManager;
 import com.yelong.androidframeproject.view.UpMarqueeView;
 import com.yelong.ulibrary.DrawableUtil;
 import com.yelong.ulibrary.ToastUtil;
+import com.yelong.ulibrary.view.BadgeFactory;
+import com.yelong.ulibrary.view.BadgeView;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -29,6 +34,7 @@ public class MainActivity extends BaseActivity {
     private TextView tvMessage;
     private ImageView mImageView;
     private UpMarqueeView mMarqueeView;
+    private Button mCenterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,7 @@ public class MainActivity extends BaseActivity {
         MainApplication.getEventBus().register(this);
 
         tvMessage = (TextView) findViewById(R.id.message);
+        mCenterButton = (Button) findViewById(R.id.center_btn);
 
         setRightButtonVisible("测试", new View.OnClickListener() {
             @Override
@@ -61,6 +68,15 @@ public class MainActivity extends BaseActivity {
                 ToastUtil.showShort(MainActivity.this, "你点击了==" + item);
             }
         });
+
+        BadgeFactory.create(this).setTextColor(Color.WHITE)
+                .setWidthAndHeight(25, 25)
+                .setBadgeBackground(Color.RED)
+                .setTextSize(10)
+                .setBadgeGravity(Gravity.RIGHT | Gravity.TOP)
+                .setBadgeCount(20)
+                .setShape(BadgeView.SHAPE_ROUND_RECTANGLE)
+                .setMargin(0, 0, 5, 0).bind(mCenterButton);
     }
 
     public void testOkHttp() {
