@@ -114,3 +114,14 @@ bintray {
         publish = true
     }
 }
+
+/**生成Jar文件,执行命令gradle makeJar*/
+task makeJar(type: Copy) {
+    delete 'build/libs/basesdk.jar'
+    from('build/intermediates/bundles/release/')
+    into('build/libs/')
+    include('classes.jar')
+    rename ('classes.jar', 'basesdk.jar')
+}
+
+makeJar.dependsOn(build)
