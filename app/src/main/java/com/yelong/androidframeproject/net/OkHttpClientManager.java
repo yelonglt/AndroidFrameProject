@@ -1,9 +1,7 @@
 package com.yelong.androidframeproject.net;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
@@ -11,9 +9,6 @@ import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.internal.$Gson$Types;
-import com.yelong.androidframeproject.net.cookie.CookiesManager;
-import com.yelong.androidframeproject.net.interceptor.CacheInterceptor;
-import com.yelong.androidframeproject.net.interceptor.LoggerInterceptor;
 import com.yelong.androidframeproject.net.volley.ImageUtils;
 
 import java.io.File;
@@ -24,18 +19,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.FileNameMap;
 import java.net.URLConnection;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.security.cert.CertificateFactory;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
-
-import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -46,7 +33,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.internal.platform.Platform;
 
 /**
  * OkHttpClient请求统一管理类
@@ -54,93 +40,12 @@ import okhttp3.internal.platform.Platform;
  * mail:354734713@qq.com
  */
 public class OkHttpClientManager {
-    public static final String TAG = OkHttpClientManager.class.getSimpleName();
 
-    private static OkHttpClient mOkHttpClient;
-    private static OkHttpClient.Builder builder;
+    private OkHttpClient mOkHttpClient;
     private Handler mDelivery;
     private Gson mGson;
 
-    /**
-     * 初始化OkHttpClient
-     *
-     * @param context
-     * @param shouldCache 是否设置缓存
-     * @param isCookie    是否设置Cookie
-     * @param isLogger    是否设置显示log信息
-     */
-    public static void init(Context context, boolean shouldCache, boolean isCookie, boolean isLogger) {
-        builder = new OkHttpClient.Builder();
-        //设置缓存
-        if (shouldCache) {
-            File cacheDir;
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                cacheDir = context.getExternalCacheDir();
-            } else {
-                cacheDir = context.getCacheDir();
-            }
-
-            int cacheSize = 10 * 1024 * 1024;
-            Cache cache = new Cache(cacheDir, cacheSize);
-            builder.cache(cache);
-            builder.addInterceptor(new CacheInterceptor());
-        }
-        //设置Cookie
-        if (isCookie) {
-            builder.cookieJar(new CookiesManager());
-        }
-
-        //设置显示log信息
-        if (isLogger) {
-            builder.addInterceptor(new LoggerInterceptor(TAG, true));
-        }
-    }
-
-    /**
-     * 设置证书,因为有些网站必须有签名证书才能访问
-     *
-     * @param certificates
-     * @return
-     */
-    public static void setCertificates(InputStream... certificates) {
-        try {
-            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            //KeyStore keyStore = KeyStore.getInstance("PKCS12", "BC");
-            keyStore.load(null, null);
-
-            int index = 0;
-            for (InputStream certificate : certificates) {
-                String certificateAlias = Integer.toString(index++);
-                keyStore.setCertificateEntry(certificateAlias, certificateFactory.generateCertificate(certificate));
-                if (certificate != null) {
-                    certificate.close();
-                }
-            }
-
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-
-            TrustManagerFactory trustManagerFactory =
-                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-
-            trustManagerFactory.init(keyStore);
-            sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
-
-            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-            builder.sslSocketFactory(sslSocketFactory, Platform.get().trustManager(sslSocketFactory));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private OkHttpClientManager() {
-        if (builder == null) {
-            //没有初始化给个默认的
-            builder = new OkHttpClient.Builder();
-        }
-        mOkHttpClient = builder.connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS).build();
         mDelivery = new Handler(Looper.getMainLooper());
         mGson = new Gson();
     }
@@ -151,6 +56,19 @@ public class OkHttpClientManager {
 
     public static OkHttpClientManager getInstance() {
         return SingletonHolder.mInstance;
+    }
+
+    /**
+     * 初始化OkHttpClient对象
+     *
+     * @param builder OkHttpClient.Builder
+     */
+    public void init(OkHttpClient.Builder builder) {
+        if (builder == null) builder = new OkHttpClient.Builder();
+        mOkHttpClient = builder.connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
     }
 
     /**
