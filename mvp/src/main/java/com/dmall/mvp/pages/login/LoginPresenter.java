@@ -47,8 +47,8 @@ public class LoginPresenter implements LoginContract.Presenter {
             @Override
             public void call(Integer integer) {
                 mLoginView.hideLoadingDialog();
-                if ("yelong".equals(mLoginView.getUserName()) && "123".equals(mLoginView.getPassword())) {
-                    mLoginView.showLoginSuccess(new User("yelong", "123"));
+                if ("yelong".equals(mLoginView.getUserName()) && "123456".equals(mLoginView.getPassword())) {
+                    mLoginView.showLoginSuccess(new User("yelong", "123456"));
                 } else {
                     mLoginView.showLoginFailed();
                 }

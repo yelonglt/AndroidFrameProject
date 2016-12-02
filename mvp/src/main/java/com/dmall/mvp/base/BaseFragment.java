@@ -1,6 +1,7 @@
 package com.dmall.mvp.base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,23 +16,35 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment extends Fragment {
 
+    protected boolean isViewCreated = false;
     protected BaseActivity mActivity;
 
     /**
      * 获取Fragment的布局文件Id
      *
-     * @return
+     * @return 布局文件Id
      */
     protected abstract int getLayoutId();
 
     /**
      * 初始化布局文件组件
      *
-     * @param view
-     * @param savedInstanceState
+     * @param contentView        Fragment添加的内容视图
+     * @param savedInstanceState 保存实例状态
      */
-    protected abstract void initView(View view, Bundle savedInstanceState);
+    protected abstract void initView(View contentView, Bundle savedInstanceState);
 
+    /**
+     * 懒加载数据
+     */
+    protected void lazyLoadData() {
+    }
+
+    /**
+     * Fragment持有的Activity
+     *
+     * @return BaseActivity
+     */
     protected BaseActivity getHoldingActivity() {
         return mActivity;
     }
@@ -42,6 +55,10 @@ public abstract class BaseFragment extends Fragment {
         this.mActivity = (BaseActivity) activity;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     @Nullable
     @Override
@@ -51,10 +68,18 @@ public abstract class BaseFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getUserVisibleHint()) {
+            lazyLoadData();
+        }
+    }
+
     /**
      * 添加BaseFragment
      *
-     * @param fragment
+     * @param fragment 继承BaseFragment的实例
      */
     protected void addFragment(BaseFragment fragment) {
         if (null != fragment) {

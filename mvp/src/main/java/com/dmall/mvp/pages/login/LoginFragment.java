@@ -1,5 +1,6 @@
 package com.dmall.mvp.pages.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.dmall.mvp.R;
 import com.dmall.mvp.base.BaseFragment;
 import com.dmall.mvp.dto.User;
+import com.dmall.mvp.pages.main.MainActivity;
 import com.google.common.base.Preconditions;
 
 /**
@@ -28,9 +30,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
 
     private EditText mUserName;
     private EditText mPassword;
-
-    private Button mLogin;
-    private Button mCancel;
 
     private ProgressBar mProgressBar;
 
@@ -51,17 +50,17 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     protected void initView(View view, Bundle savedInstanceState) {
         mUserName = (EditText) view.findViewById(R.id.et_username);
         mPassword = (EditText) view.findViewById(R.id.et_password);
-        mLogin = (Button) view.findViewById(R.id.btn_login);
-        mCancel = (Button) view.findViewById(R.id.btn_cancel);
+        Button login = (Button) view.findViewById(R.id.btn_login);
+        Button cancel = (Button) view.findViewById(R.id.btn_cancel);
         mProgressBar = (ProgressBar) view.findViewById(R.id.pb_loading);
 
-        mLogin.setOnClickListener(new View.OnClickListener() {
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mPresenter.login();
             }
         });
-        mCancel.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -96,6 +95,9 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
     @Override
     public void showLoginSuccess(User user) {
         Toast.makeText(getHoldingActivity(), "登录成功...", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getHoldingActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
