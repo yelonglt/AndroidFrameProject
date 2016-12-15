@@ -1,32 +1,22 @@
-package com.yelong.androidframeproject.db;
+package com.yelong.androidframeproject.db.user;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
+import com.yelong.androidframeproject.db.DBDao;
 import com.yelong.androidframeproject.model.User;
 
 
 /**
+ * 用户信息业务逻辑
  * Created by yelong on 2016/3/1.
  */
-public class UserDao {
-    private SQLiteDatabase db;
-    private static String whereClauseByTel = DBParam.USER_TEL + "=?";
+public class UserDao extends DBDao {
+    private static String whereClauseByTel = DBUserParam.USER_TEL + "=?";
 
-    public UserDao(Context context) {
-        DBManager.initialize(new DatabaseHelper(context));
+    public UserDao() {
     }
-
-    private void openDB() {
-        db = DBManager.getInstance().openDB();
-    }
-
-    private void closeDB() {
-        DBManager.getInstance().closeDB();
-    }
-
+    
     /**
      * 添加用户或者更新用户信息
      *
@@ -34,7 +24,7 @@ public class UserDao {
      * @return
      */
     public long addUser(User user) {
-        openDB();
+        open();
         long l = 0;
         User oldUser = getUserByTel(user.tel);
         if (oldUser != null) {
@@ -42,7 +32,7 @@ public class UserDao {
         } else {
             l = insert(user);
         }
-        closeDB();
+        close();
         return l;
     }
 
@@ -53,25 +43,25 @@ public class UserDao {
      * @return
      */
     private long update(User user) {
-        openDB();
+        open();
         String[] selectionArgs = {user.tel};
 
         ContentValues values = new ContentValues();
-        values.put(DBParam.USER_NAME, user.name);
-        values.put(DBParam.USER_ADDRESS, user.address);
-        values.put(DBParam.USER_TEL, user.tel);
-        values.put(DBParam.USER_INTRO, user.intro);
-        values.put(DBParam.USER_LOGO, user.logo);
-        values.put(DBParam.SESSION_ID, user.sessionId);
+        values.put(DBUserParam.USER_NAME, user.name);
+        values.put(DBUserParam.USER_ADDRESS, user.address);
+        values.put(DBUserParam.USER_TEL, user.tel);
+        values.put(DBUserParam.USER_INTRO, user.intro);
+        values.put(DBUserParam.USER_LOGO, user.logo);
+        values.put(DBUserParam.SESSION_ID, user.sessionId);
 
         long num = 0;
         try {
-            num = db.update(DBParam.TABLE_USER, values, whereClauseByTel, selectionArgs);
+            num = db.update(DBUserParam.TABLE_USER, values, whereClauseByTel, selectionArgs);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        closeDB();
+        close();
         return num;
     }
 
@@ -82,23 +72,23 @@ public class UserDao {
      * @return
      */
     private long insert(User user) {
-        openDB();
+        open();
         ContentValues values = new ContentValues();
-        values.put(DBParam.USER_NAME, user.name);
-        values.put(DBParam.USER_ADDRESS, user.address);
-        values.put(DBParam.USER_TEL, user.tel);
-        values.put(DBParam.USER_INTRO, user.intro);
-        values.put(DBParam.USER_LOGO, user.logo);
-        values.put(DBParam.SESSION_ID, user.sessionId);
+        values.put(DBUserParam.USER_NAME, user.name);
+        values.put(DBUserParam.USER_ADDRESS, user.address);
+        values.put(DBUserParam.USER_TEL, user.tel);
+        values.put(DBUserParam.USER_INTRO, user.intro);
+        values.put(DBUserParam.USER_LOGO, user.logo);
+        values.put(DBUserParam.SESSION_ID, user.sessionId);
 
         long num = 0;
         try {
-            num = db.insert(DBParam.TABLE_USER, null, values);
+            num = db.insert(DBUserParam.TABLE_USER, null, values);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        closeDB();
+        close();
         return num;
     }
 
@@ -109,12 +99,12 @@ public class UserDao {
      * @return
      */
     public User getUserByTel(String tel) {
-        openDB();
+        open();
         User user = null;
         Cursor cursor = null;
         String[] selectionArgs = {tel};
         try {
-            cursor = db.query(DBParam.TABLE_USER, DBParam.USER_COLUMNS, whereClauseByTel, selectionArgs, null, null, null);
+            cursor = db.query(DBUserParam.TABLE_USER, DBUserParam.USER_COLUMNS, whereClauseByTel, selectionArgs, null, null, null);
             if (cursor == null || cursor.getCount() == 0) {
                 if (cursor != null) {
                     cursor.close();
@@ -124,12 +114,12 @@ public class UserDao {
 
             if (cursor.moveToFirst()) {
                 user = new User();
-                user.name = cursor.getString(cursor.getColumnIndex(DBParam.USER_NAME));
-                user.address = cursor.getString(cursor.getColumnIndex(DBParam.USER_ADDRESS));
-                user.tel = cursor.getString(cursor.getColumnIndex(DBParam.USER_TEL));
-                user.intro = cursor.getString(cursor.getColumnIndex(DBParam.USER_INTRO));
-                user.logo = cursor.getString(cursor.getColumnIndex(DBParam.USER_LOGO));
-                user.sessionId = cursor.getString(cursor.getColumnIndex(DBParam.SESSION_ID));
+                user.name = cursor.getString(cursor.getColumnIndex(DBUserParam.USER_NAME));
+                user.address = cursor.getString(cursor.getColumnIndex(DBUserParam.USER_ADDRESS));
+                user.tel = cursor.getString(cursor.getColumnIndex(DBUserParam.USER_TEL));
+                user.intro = cursor.getString(cursor.getColumnIndex(DBUserParam.USER_INTRO));
+                user.logo = cursor.getString(cursor.getColumnIndex(DBUserParam.USER_LOGO));
+                user.sessionId = cursor.getString(cursor.getColumnIndex(DBUserParam.SESSION_ID));
             }
         } catch (Exception e) {
             if (cursor != null && !cursor.isClosed()) {
@@ -141,7 +131,7 @@ public class UserDao {
                 cursor.close();
             }
         }
-        closeDB();
+        close();
 
         return user;
     }
@@ -153,17 +143,17 @@ public class UserDao {
      * @return
      */
     public long delUserByTel(String tel) {
-        openDB();
+        open();
         String[] selectionArgs = {tel};
 
         long num = 0;
         try {
-            num = db.delete(DBParam.TABLE_USER, whereClauseByTel, selectionArgs);
+            num = db.delete(DBUserParam.TABLE_USER, whereClauseByTel, selectionArgs);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        closeDB();
+        close();
         return num;
     }
 }
