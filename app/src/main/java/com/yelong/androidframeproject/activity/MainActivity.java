@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.yelong.androidframeproject.event.MessageEvent;
 import com.yelong.androidframeproject.login.LoginInterceptor;
 import com.yelong.androidframeproject.net.OkHttpClientManager;
 import com.yelong.androidframeproject.view.UpMarqueeView;
+import com.yelong.androidframeproject.view.WaveHorizontalView;
 import com.yelong.ulibrary.DrawableUtil;
 import com.yelong.ulibrary.ToastUtil;
 import com.yelong.ulibrary.view.BadgeFactory;
@@ -35,6 +37,9 @@ public class MainActivity extends BaseActivity {
     private ImageView mImageView;
     private UpMarqueeView mMarqueeView;
     private Button mCenterButton;
+
+    private WaveHorizontalView mWaveHorizontalView;
+    private ImageView mCircleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,24 @@ public class MainActivity extends BaseActivity {
                 .setBadgeCount(20)
                 .setShape(BadgeView.SHAPE_ROUND_RECTANGLE)
                 .setMargin(0, 0, 5, 0).bind(mCenterButton);
+
+        initWave();
+    }
+
+    private void initWave() {
+        mWaveHorizontalView = (WaveHorizontalView) findViewById(R.id.mWaveHorizontalView);
+        mCircleImageView = (ImageView) findViewById(R.id.mCircleImageView);
+
+        final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(-2, -2);
+        params.gravity = Gravity.BOTTOM | Gravity.CENTER;
+        mWaveHorizontalView.setWaveAnimationListener(new WaveHorizontalView.OnWaveAnimationListener() {
+            @Override
+            public void OnWaveAnimation(float y) {
+                params.setMargins(0, 0, 0, (int) y + 2);
+                mCircleImageView.setLayoutParams(params);
+            }
+        });
+
     }
 
     public void testOkHttp() {
