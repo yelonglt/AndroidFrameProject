@@ -19,6 +19,7 @@ import com.yelong.androidframeproject.net.OkHttpClientManager;
 import com.yelong.androidframeproject.view.UpMarqueeView;
 import com.yelong.androidframeproject.view.WaveHorizontalView;
 import com.yelong.ulibrary.DrawableUtil;
+import com.yelong.ulibrary.SpannableStringUtil;
 import com.yelong.ulibrary.ToastUtil;
 import com.yelong.ulibrary.view.BadgeFactory;
 import com.yelong.ulibrary.view.BadgeView;
@@ -49,6 +50,10 @@ public class MainActivity extends BaseActivity {
         MainApplication.getEventBus().register(this);
 
         tvMessage = (TextView) findViewById(R.id.message);
+        tvMessage.setText(SpannableStringUtil
+                .getBuilder("Hello", this)
+                .setBackgroundColor(getResources().getColor(R.color.colorAccent))
+                .create());
         mCenterButton = (Button) findViewById(R.id.center_btn);
 
         setRightButtonVisible("测试", new View.OnClickListener() {
