@@ -2,14 +2,15 @@ package com.yelong.androidframeproject.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.yelong.androidframeproject.R;
+import com.yelong.ulibrary.view.SlideUpHelper;
 
 /**
  * Created by yelong on 16/8/9.
@@ -17,12 +18,14 @@ import com.yelong.androidframeproject.R;
  */
 public class MineActivity extends AppCompatActivity {
 
+    private SlideUpHelper mSlideUpHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
+        toolbar.setTitle("我的");
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         setSupportActionBar(toolbar);
 
@@ -33,15 +36,34 @@ public class MineActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                mSlideUpHelper.animationIn();
+                fab.hide();
             }
         });
+
+        LinearLayout slideView = (LinearLayout) findViewById(R.id.mSlideView);
+        mSlideUpHelper = new SlideUpHelper(slideView);
+        mSlideUpHelper.setSlideListener(new SlideUpHelper.SlideListener() {
+            @Override
+            public void onSlide(float percent) {
+
+            }
+
+            @Override
+            public void onVisibilityChanged(int visibility) {
+                if (visibility == View.GONE) {
+                    fab.show();
+                }
+            }
+        });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -74,4 +74,22 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"/>
 
+    <LinearLayout
+        android:id="@+id/mSlideView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#666"
+        android:orientation="vertical"
+        android:padding="30dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/splash_bg"/>
+
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

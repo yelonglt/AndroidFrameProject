@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //gotoWebViewActivity();
-                Intent intent = new Intent(MainActivity.this, TestActivity.class);
+                Intent intent = new Intent(MainActivity.this, MineActivity.class);
                 startActivity(intent);
             }
         });
