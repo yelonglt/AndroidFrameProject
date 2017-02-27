@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.yelong.androidframeproject.exception.CrashHandler;
+import com.yelong.androidframeproject.helper.TypeFaceHelper;
 import com.yelong.androidframeproject.net.OkHttpClientConfig;
 import com.yelong.androidframeproject.net.OkHttpClientManager;
 
@@ -71,6 +72,7 @@ public class MainApplication extends Application {
         init();
 
         setDoorState(AppConstants.STATE_OPEN);
+        TypeFaceHelper.generateTypeface(this);
     }
 
     /**

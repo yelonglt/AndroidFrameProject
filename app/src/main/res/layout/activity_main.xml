@@ -45,6 +45,7 @@
 
 
     <com.yelong.androidframeproject.view.ShadowCircleImageView
+        android:id="@+id/shadow_circle_view"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_below="@id/center_btn"
@@ -56,6 +57,13 @@
         app:sivShadowDx="0dp"
         app:sivShadowDy="1dp"
         app:sivShadowRadius="1dp"/>
+
+    <com.yelong.androidframeproject.view.FontButton
+        android:layout_centerHorizontal="true"
+        android:id="@+id/font_button"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/shadow_circle_view"/>
 
     <ImageView
         android:id="@+id/tintImage"

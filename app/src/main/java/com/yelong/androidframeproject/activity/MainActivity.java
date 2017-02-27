@@ -16,6 +16,7 @@ import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.event.MessageEvent;
 import com.yelong.androidframeproject.login.LoginInterceptor;
 import com.yelong.androidframeproject.net.OkHttpClientManager;
+import com.yelong.androidframeproject.view.FontButton;
 import com.yelong.androidframeproject.view.UpMarqueeView;
 import com.yelong.androidframeproject.view.WaveHorizontalView;
 import com.yelong.ulibrary.DrawableUtil;
@@ -41,6 +42,8 @@ public class MainActivity extends BaseActivity {
 
     private WaveHorizontalView mWaveHorizontalView;
     private ImageView mCircleImageView;
+
+    private FontButton mFontButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,12 @@ public class MainActivity extends BaseActivity {
                 .setMargin(0, 0, 5, 0).bind(mCenterButton);
 
         initWave();
+
+        mFontButton = (FontButton) findViewById(R.id.font_button);
+        assert mFontButton != null;
+        mFontButton.setText("登   录");
+        mFontButton.setBackground(R.color.colorPrimary, R.color.colorPrimaryDark);
+        mFontButton.setTextColor(android.R.color.holo_blue_bright, android.R.color.holo_blue_dark);
     }
 
     private void initWave() {

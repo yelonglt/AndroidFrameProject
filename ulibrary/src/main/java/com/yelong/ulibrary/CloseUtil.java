@@ -10,6 +10,10 @@ import java.io.Closeable;
 
 public final class CloseUtil {
 
+    private CloseUtil() {
+        throw new UnsupportedOperationException("can't init...");
+    }
+
     /**
      * 关闭Closeable对象
      *
