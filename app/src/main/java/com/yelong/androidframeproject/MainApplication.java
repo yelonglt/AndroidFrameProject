@@ -14,11 +14,6 @@ import com.yelong.androidframeproject.net.OkHttpClientManager;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 /**
  * 自定义Application
  * Created by eyetech on 16/4/17.
@@ -26,10 +21,6 @@ import java.util.List;
 public class MainApplication extends Application {
 
     public static MainApplication instance;
-
-    public List<Activity> mActivityList;
-
-    public int activityCounter = 0;
 
     public static MainApplication getInstance() {
         return instance;
@@ -79,53 +70,37 @@ public class MainApplication extends Application {
      * 初始化相关操作
      */
     public void init() {
-        mActivityList = Collections.synchronizedList(new ArrayList<Activity>());
         registerActivityLifecycleCallbacks(new SimpleActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 super.onActivityCreated(activity, savedInstanceState);
-                mActivityList.add(activity);
+                ActivityStack.getInstance().addActivity(activity);
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
                 super.onActivityStarted(activity);
-                activityCounter += 1;
+                ActivityStack.getInstance().activityCounterPlusOne();
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+                super.onActivityResumed(activity);
+                ActivityStack.getInstance().setCurrentActivity(activity);
             }
 
             @Override
             public void onActivityStopped(Activity activity) {
                 super.onActivityStopped(activity);
-                activityCounter -= 1;
+                ActivityStack.getInstance().activityCounterSubtractOne();
             }
 
             @Override
             public void onActivityDestroyed(Activity activity) {
                 super.onActivityDestroyed(activity);
-                mActivityList.remove(activity);
+                ActivityStack.getInstance().removeActivity(activity);
             }
         });
-    }
-
-    /**
-     * 判断App是否在后台
-     */
-    public boolean isAppBackground() {
-        return activityCounter == 0;
-    }
-
-    /**
-     * 退出整个App，避免重新启动
-     */
-    public void exitApp() {
-        Iterator<Activity> iterator = mActivityList.iterator();
-        while (iterator.hasNext()) {
-            Activity activity = iterator.next();
-            activity.finish();
-            iterator.remove();
-        }
-        mActivityList.clear();
-        System.exit(0);
     }
 
     public void setDoorState(@AppConstants.DoorState int state) {

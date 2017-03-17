@@ -2,6 +2,7 @@ package com.yelong.androidframeproject.net;
 
 import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.RawRes;
 
 import com.yelong.androidframeproject.net.cookie.CookiesManager;
 import com.yelong.androidframeproject.net.interceptor.CacheInterceptor;
@@ -9,12 +10,16 @@ import com.yelong.androidframeproject.net.interceptor.LoggerInterceptor;
 
 import java.io.File;
 import java.io.InputStream;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 import okhttp3.Cache;
@@ -122,6 +127,49 @@ public class OkHttpClientConfig {
             e.printStackTrace();
         }
         return this;
+    }
+
+    public SSLSocketFactory newSslSocketFactory(String publicKey) {
+        TrustManager tm[] = {new PubKeyManager(publicKey)};
+        SSLSocketFactory sslSocketFactory = null;
+        try {
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, tm, null);
+            sslSocketFactory = context.getSocketFactory();
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+        }
+        return sslSocketFactory;
+    }
+
+    private SSLSocketFactory newSslSocketFactory(Context ctx,@RawRes int id) {
+        try {
+            KeyStore trusted = KeyStore.getInstance("PKCS12", "BC");
+
+            InputStream in = ctx.getResources().openRawResource(id);
+
+            CertificateFactory cerFactory = CertificateFactory.getInstance("X.509");
+            Certificate cer;
+            try {
+                cer = cerFactory.generateCertificate(in);
+            } finally {
+                in.close();
+            }
+
+            trusted.load(null, null);
+            trusted.setCertificateEntry("ca", cer);
+
+            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+            tmf.init(trusted);
+
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, tmf.getTrustManagers(), null);
+
+            return context.getSocketFactory();
+        } catch (Exception e) {
+            throw new AssertionError(e);
+        }
     }
 
     /**
