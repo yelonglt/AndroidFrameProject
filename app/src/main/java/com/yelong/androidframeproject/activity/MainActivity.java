@@ -19,6 +19,7 @@ import com.yelong.androidframeproject.net.OkHttpClientManager;
 import com.yelong.androidframeproject.view.FontButton;
 import com.yelong.androidframeproject.view.UpMarqueeView;
 import com.yelong.androidframeproject.view.WaveHorizontalView;
+import com.yelong.ulibrary.DToast;
 import com.yelong.ulibrary.DrawableUtil;
 import com.yelong.ulibrary.SpannableStringUtil;
 import com.yelong.ulibrary.ToastUtil;
@@ -98,6 +99,12 @@ public class MainActivity extends BaseActivity {
         mFontButton.setText("登   录");
         mFontButton.setBackground(R.color.colorPrimary, R.color.colorPrimaryDark);
         mFontButton.setTextColor(android.R.color.holo_blue_bright, android.R.color.holo_blue_dark);
+        mFontButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DToast.makeText(MainActivity.this, "你点击了").show();
+            }
+        });
     }
 
     private void initWave() {
