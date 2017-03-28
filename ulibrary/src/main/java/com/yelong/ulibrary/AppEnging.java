@@ -47,7 +47,7 @@ public class AppEnging {
             //获取应用程序中相关信息,是否是系统程序和是否安装到SD卡
             boolean isUser;
             int flags = applicationInfo.flags;
-            if ((applicationInfo.FLAG_SYSTEM & flags) == applicationInfo.FLAG_SYSTEM) {
+            if ((ApplicationInfo.FLAG_SYSTEM & flags) == ApplicationInfo.FLAG_SYSTEM) {
                 //系统程序
                 isUser = false;
             } else {
@@ -56,7 +56,7 @@ public class AppEnging {
             }
             //是否安装到SD卡
             boolean isSD;
-            if ((applicationInfo.FLAG_EXTERNAL_STORAGE & flags) == applicationInfo.FLAG_EXTERNAL_STORAGE) {
+            if ((ApplicationInfo.FLAG_EXTERNAL_STORAGE & flags) == ApplicationInfo.FLAG_EXTERNAL_STORAGE) {
                 //安装到了SD卡
                 isSD = true;
             } else {

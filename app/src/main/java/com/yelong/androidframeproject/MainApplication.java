@@ -33,16 +33,15 @@ public class MainApplication extends Application {
         return application.mRefWatcher;
     }
 
-    //获取App全局唯一的EventBus实例
-    private static EventBus mEventBus;
+    private static class EventBusHolder {
+        //获取App全局唯一的EventBus实例
+        private static EventBus mEventBus = EventBus.builder()
+                .throwSubscriberException(BuildConfig.DEBUG)
+                .addIndex(new EventBusIndex()).installDefaultEventBus();
+    }
 
     public static EventBus getEventBus() {
-        if (mEventBus == null) {
-            mEventBus = EventBus.builder()
-                    .throwSubscriberException(BuildConfig.DEBUG)
-                    .addIndex(new EventBusIndex()).installDefaultEventBus();
-        }
-        return mEventBus;
+        return EventBusHolder.mEventBus;
     }
 
     @Override
