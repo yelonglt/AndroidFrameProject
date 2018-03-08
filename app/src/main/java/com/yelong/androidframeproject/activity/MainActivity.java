@@ -17,12 +17,14 @@ import com.yelong.androidframeproject.event.MessageEvent;
 import com.yelong.androidframeproject.login.LoginInterceptor;
 import com.yelong.androidframeproject.net.OkHttpClientManager;
 import com.yelong.androidframeproject.view.FontButton;
+import com.yelong.androidframeproject.view.ShadowCircleImageView;
 import com.yelong.androidframeproject.view.UpMarqueeView;
 import com.yelong.androidframeproject.view.WaveHorizontalView;
 import com.yelong.ulibrary.DToast;
 import com.yelong.ulibrary.DrawableUtil;
 import com.yelong.ulibrary.SpannableStringUtil;
 import com.yelong.ulibrary.ToastUtil;
+import com.yelong.ulibrary.animation.Rotate3DAnimation;
 import com.yelong.ulibrary.view.BadgeFactory;
 import com.yelong.ulibrary.view.BadgeView;
 
@@ -105,6 +107,8 @@ public class MainActivity extends BaseActivity {
                 DToast.makeText(MainActivity.this, "你点击了").show();
             }
         });
+
+        startAnimation();
     }
 
     private void initWave() {
@@ -149,6 +153,22 @@ public class MainActivity extends BaseActivity {
         data.add("主人内疚逃命时没带够，回废墟狂挖30小时！");
 //        data.add("竟不是小米乐视！看水抢了骁龙821首发了！！！");
         return data;
+    }
+
+    private void startAnimation() {
+
+        final ShadowCircleImageView imageView = (ShadowCircleImageView) findViewById(R.id.shadow_circle_view);
+        imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                Rotate3DAnimation animation = new Rotate3DAnimation(0f, 360f,
+                        imageView.getWidth() / 2, imageView.getHeight() / 2, 0,
+                        Rotate3DAnimation.DIRECTION.Y, false);
+                animation.setDuration(5000);
+                imageView.setAnimation(animation);
+                animation.start();
+            }
+        });
     }
 
     @Override
