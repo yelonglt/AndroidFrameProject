@@ -19,7 +19,7 @@ import android.webkit.WebViewClient;
 
 import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.web.WebJsInterface;
-import com.yelong.androidframeproject.web.https.SSLSocketFactoryHelper;
+import com.yelong.androidframeproject.net.SSLSocketFactoryHelper;
 
 import java.io.InputStream;
 import java.net.URL;

@@ -20,8 +20,8 @@ import okio.Buffer;
  * mail:354734713@qq.com
  */
 public class LoggerInterceptor implements Interceptor {
+    private static final String TAG = LoggerInterceptor.class.getSimpleName();
 
-    public static final String TAG = LoggerInterceptor.class.getSimpleName();
     private String tag;
     private boolean showResponse;
 
@@ -45,12 +45,6 @@ public class LoggerInterceptor implements Interceptor {
         return logForResponse(response);
     }
 
-    /**
-     * 打印返回信息
-     *
-     * @param response
-     * @return
-     */
     private Response logForResponse(Response response) {
         try {
             Log.e(tag, "========response'log=======");
@@ -88,11 +82,6 @@ public class LoggerInterceptor implements Interceptor {
         return response;
     }
 
-    /**
-     * 打印请求信息
-     *
-     * @param request
-     */
     private void logForRequest(Request request) {
         try {
             String url = request.url().toString();
@@ -123,17 +112,9 @@ public class LoggerInterceptor implements Interceptor {
     }
 
     private boolean isText(MediaType mediaType) {
-        if (mediaType.type() != null && mediaType.type().equals("text")) {
-            return true;
-        }
-        if (mediaType.subtype() != null) {
-            if (mediaType.subtype().equals("json") ||
-                    mediaType.subtype().equals("xml") ||
-                    mediaType.subtype().equals("html") ||
-                    mediaType.subtype().equals("webviewhtml"))
-                return true;
-        }
-        return false;
+        return mediaType.type() != null
+                && mediaType.type().equals("text") || mediaType.subtype() != null
+                && (mediaType.subtype().equals("json") || mediaType.subtype().equals("xml") || mediaType.subtype().equals("html") || mediaType.subtype().equals("webviewhtml"));
     }
 
     private String bodyToString(final Request request) {

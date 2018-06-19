@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void testOkHttp() {
-        OkHttpClientManager.getAsyn("https://api.github.com", new OkHttpClientManager.ResultCallback<String>() {
+        OkHttpClientManager.getAsync("https://api.github.com", new OkHttpClientManager.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 System.out.println("fail == " + e.toString());

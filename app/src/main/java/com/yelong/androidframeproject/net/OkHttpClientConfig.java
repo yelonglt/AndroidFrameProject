@@ -2,11 +2,11 @@ package com.yelong.androidframeproject.net;
 
 import android.content.Context;
 import android.os.Environment;
-import android.support.annotation.RawRes;
 
 import com.yelong.androidframeproject.net.cookie.CookiesManager;
 import com.yelong.androidframeproject.net.interceptor.CacheInterceptor;
 import com.yelong.androidframeproject.net.interceptor.LoggerInterceptor;
+import com.yelong.androidframeproject.net.interceptor.ProgressInterceptor;
 
 import java.io.File;
 import java.io.InputStream;
@@ -14,24 +14,23 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.internal.platform.Platform;
 
 /**
  * OkHttp配置管理类
  * Created by yelong on 2016/11/25.
  * mail:354734713@qq.com
  */
-
 public class OkHttpClientConfig {
 
     private OkHttpClient.Builder mBuilder;
@@ -90,6 +89,10 @@ public class OkHttpClientConfig {
         return this;
     }
 
+    public OkHttpClientConfig addNetworkProgress() {
+        mBuilder.addInterceptor(new ProgressInterceptor());
+        return this;
+    }
 
     /**
      * 添加https信任证书
@@ -101,7 +104,6 @@ public class OkHttpClientConfig {
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            //KeyStore keyStore = KeyStore.getInstance("PKCS12", "BC");
             keyStore.load(null, null);
 
             int index = 0;
@@ -113,16 +115,31 @@ public class OkHttpClientConfig {
                 }
             }
 
+            final X509TrustManager trustManager = new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                    for (X509Certificate cert : chain) {
+                        cert.checkValidity();
+                    }
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                    for (X509Certificate cert : chain) {
+                        cert.checkValidity();
+                    }
+                }
+
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            };
+
             SSLContext sslContext = SSLContext.getInstance("TLS");
-
-            TrustManagerFactory trustManagerFactory =
-                    TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-
-            trustManagerFactory.init(keyStore);
-            sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
-
+            sslContext.init(null, new TrustManager[]{trustManager}, new SecureRandom());
             SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-            mBuilder.sslSocketFactory(sslSocketFactory, Platform.get().trustManager(sslSocketFactory));
+            mBuilder.sslSocketFactory(sslSocketFactory, trustManager);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -140,36 +157,6 @@ public class OkHttpClientConfig {
             e.printStackTrace();
         }
         return sslSocketFactory;
-    }
-
-    private SSLSocketFactory newSslSocketFactory(Context ctx,@RawRes int id) {
-        try {
-            KeyStore trusted = KeyStore.getInstance("PKCS12", "BC");
-
-            InputStream in = ctx.getResources().openRawResource(id);
-
-            CertificateFactory cerFactory = CertificateFactory.getInstance("X.509");
-            Certificate cer;
-            try {
-                cer = cerFactory.generateCertificate(in);
-            } finally {
-                in.close();
-            }
-
-            trusted.load(null, null);
-            trusted.setCertificateEntry("ca", cer);
-
-            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-            tmf.init(trusted);
-
-            SSLContext context = SSLContext.getInstance("TLS");
-            context.init(null, tmf.getTrustManagers(), null);
-
-            return context.getSocketFactory();
-        } catch (Exception e) {
-            throw new AssertionError(e);
-        }
     }
 
     /**

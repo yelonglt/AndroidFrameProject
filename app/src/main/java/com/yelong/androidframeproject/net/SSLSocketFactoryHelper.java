@@ -1,15 +1,17 @@
-package com.yelong.androidframeproject.web.https;
+package com.yelong.androidframeproject.net;
 
 import android.content.Context;
 import android.support.annotation.RawRes;
+import android.text.TextUtils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.security.cert.CertificateException;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -29,60 +31,58 @@ public class SSLSocketFactoryHelper {
 
     /**
      * Https信任指定的证书
-     *
-     * @param context
-     * @param id      证书id
-     * @return
      */
     public static SSLSocketFactory newSslSocketFactory(Context context, @RawRes int id) {
+        InputStream inputStream = null;
         try {
-            // Get an instance of the Bouncy Castle KeyStore format
-            //KeyStore trusted = KeyStore.getInstance(KeyStore.getDefaultType());
-            KeyStore trusted = KeyStore.getInstance("PKCS12", "BC");
-
-            InputStream in = context.getResources().openRawResource(id);
-
+            inputStream = context.getResources().openRawResource(id);
             CertificateFactory cerFactory = CertificateFactory.getInstance("X.509");
-            Certificate cer;
-            try {
-                cer = cerFactory.generateCertificate(in);
-            } finally {
-                in.close();
-            }
+            Certificate cer = cerFactory.generateCertificate(inputStream);
 
-            trusted.load(null, null);
-            trusted.setCertificateEntry("ca", cer);
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry("ca", cer);
 
             String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-            tmf.init(trusted);
+            tmf.init(keyStore);
 
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), null);
 
             return sslContext.getSocketFactory();
         } catch (Exception e) {
-            throw new AssertionError(e);
+            throw new IllegalStateException("SSLSocketFactoryHelper newSslSocketFactory Exception");
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     /**
      * 信任所有https请求
-     *
-     * @return
      */
     public static SSLSocketFactory defaultSSLSocketFactory() {
         try {
-            final TrustManager[] trustAllCerts = new TrustManager[]{
+            final TrustManager[] trustManagers = new TrustManager[]{
                     new X509TrustManager() {
                         @Override
                         public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
+                            for (X509Certificate cert : chain) {
+                                cert.checkValidity();
+                            }
                         }
 
                         @Override
                         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
+                            for (X509Certificate cert : chain) {
+                                cert.checkValidity();
+                            }
                         }
 
                         @Override
@@ -93,19 +93,19 @@ public class SSLSocketFactoryHelper {
             };
 
             SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts, new SecureRandom());
+            sslContext.init(null, trustManagers, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String hostname, SSLSession session) {
-                    return true;
+                    return !TextUtils.isEmpty(hostname);
                 }
             });
 
             return sslContext.getSocketFactory();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new AssertionError(e);
+            throw new IllegalStateException("SSLSocketFactoryHelper defaultSSLSocketFactory Exception");
         }
     }
 

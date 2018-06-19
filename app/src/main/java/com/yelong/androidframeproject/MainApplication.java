@@ -54,7 +54,8 @@ public class MainApplication extends Application {
         CrashHandler.getInstance().init(this);
         //初始化OkHttp
         OkHttpClientManager.getInstance().init(OkHttpClientConfig
-                .getInstance().addLogger("HH").addCookie()
+                .getInstance().addLogger(null).addCookie()
+                .addNetworkProgress()
                 /*.addCertificates(getAssets().open("srca.cer"))*/
                 /*.addCertificates(getResources().openRawResource(R.raw.srca))*/
                 .builder());
