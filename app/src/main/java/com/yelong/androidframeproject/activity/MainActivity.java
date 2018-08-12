@@ -158,6 +158,7 @@ public class MainActivity extends BaseActivity {
     private void startAnimation() {
 
         final ShadowCircleImageView imageView = (ShadowCircleImageView) findViewById(R.id.shadow_circle_view);
+        assert imageView != null;
         imageView.post(new Runnable() {
             @Override
             public void run() {

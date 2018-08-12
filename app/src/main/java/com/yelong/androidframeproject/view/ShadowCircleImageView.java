@@ -9,8 +9,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import com.yelong.androidframeproject.R;
 
@@ -20,7 +20,7 @@ import com.yelong.androidframeproject.R;
  * Created by yelong on 16/9/13.
  * mail:354734713@qq.com
  */
-public class ShadowCircleImageView extends ImageView {
+public class ShadowCircleImageView extends AppCompatImageView {
 
     private int mBorderWidth = 0;
     private float mShadowRadius = 0.0f;
