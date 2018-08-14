@@ -1,12 +1,4 @@
 apply plugin: 'com.android.application'
-//为EventBus建立索引加速，提高运行速度
-apply plugin: 'com.neenbedankt.android-apt'
-apt {
-    arguments {
-        //build会在包名下生成一个EventBusIndex类，在类中可以直接使用
-        eventBusIndex "com.yelong.androidframeproject.EventBusIndex"
-    }
-}
 //计算工程的方法数
 apply plugin: 'com.getkeepsafe.dexcount'
 
@@ -15,8 +7,8 @@ android {
     //aaptOptions.cruncherEnabled = false
     //aaptOptions.useNewCruncher = false
 
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.yelong.androidframeproject"
         minSdkVersion 15
@@ -81,17 +73,16 @@ tasks.whenTaskAdded { task ->
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    androidTestCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
-    compile project(':ulibrary')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation project(':ulibrary')
 }

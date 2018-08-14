@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.yelong.androidframeproject.MainApplication;
 import com.yelong.androidframeproject.R;
 import com.yelong.androidframeproject.event.MessageEvent;
 import com.yelong.androidframeproject.login.LoginInterceptor;
@@ -28,6 +27,7 @@ import com.yelong.ulibrary.animation.Rotate3DAnimation;
 import com.yelong.ulibrary.view.BadgeFactory;
 import com.yelong.ulibrary.view.BadgeView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setToolbarTitle("主界面");
-        MainApplication.getEventBus().register(this);
+        EventBus.getDefault().register(this);
 
         tvMessage = (TextView) findViewById(R.id.message);
         tvMessage.setText(SpannableStringUtil
@@ -176,7 +176,7 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         System.out.println("MainActivity onDestroy");
-        MainApplication.getEventBus().unregister(this);
+        EventBus.getDefault().unregister(this);
     }
 
     //EventBus.getDefault().post(new MessageEvent("你在干嘛呢？"));

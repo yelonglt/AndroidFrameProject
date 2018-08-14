@@ -12,8 +12,6 @@ import com.yelong.androidframeproject.helper.TypeFaceHelper;
 import com.yelong.androidframeproject.net.OkHttpClientConfig;
 import com.yelong.androidframeproject.net.OkHttpClientManager;
 
-import org.greenrobot.eventbus.EventBus;
-
 /**
  * 自定义Application
  * Created by eyetech on 16/4/17.
@@ -31,17 +29,6 @@ public class MainApplication extends Application {
     public static RefWatcher getRefWatcher(Context context) {
         MainApplication application = (MainApplication) context.getApplicationContext();
         return application.mRefWatcher;
-    }
-
-    private static class EventBusHolder {
-        //获取App全局唯一的EventBus实例
-        private static EventBus mEventBus = EventBus.builder()
-                .throwSubscriberException(BuildConfig.DEBUG)
-                .addIndex(new EventBusIndex()).installDefaultEventBus();
-    }
-
-    public static EventBus getEventBus() {
-        return EventBusHolder.mEventBus;
     }
 
     @Override
