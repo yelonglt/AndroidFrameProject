@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion compileSdkVersionValue
 
     defaultConfig {
         applicationId "com.dmall.mvp"
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion minSdkVersionValue
+        targetSdkVersion targetSdkVersionValue
         versionCode 1
         versionName "1.0"
     }
@@ -20,7 +19,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
             buildConfigField "boolean", "showLog", "false"//是否输出LOG信息
         }
     }
@@ -29,9 +27,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'io.reactivex:rxjava:1.2.4'
-    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:design:$support_version"
     implementation 'com.google.guava:guava:23.0'
 }
