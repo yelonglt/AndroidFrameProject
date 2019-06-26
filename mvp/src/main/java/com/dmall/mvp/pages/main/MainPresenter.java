@@ -4,11 +4,12 @@ import com.dmall.mvp.business.TaskDataSourceImpl;
 import com.dmall.mvp.business.TaskManager;
 import com.google.common.base.Preconditions;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by yelong on 16/7/28.
@@ -34,12 +35,12 @@ public class MainPresenter implements MainContract.Presenter {
         //mainView.showString(content);
 
         //使用RxJava
-        Observable.just("")
-                .subscribeOn(Schedulers.immediate())
+        Disposable disposable = Observable.just("")
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(Schedulers.io())
-                .map(new Func1<String, String>() {
+                .map(new Function<String, String>() {
                     @Override
-                    public String call(String s) {
+                    public String apply(String input) {
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
@@ -48,9 +49,9 @@ public class MainPresenter implements MainContract.Presenter {
                         return mManager.getShowContent();
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
+                .subscribe(new Consumer<String>() {
                     @Override
-                    public void call(String s) {
+                    public void accept(String s) throws Exception {
                         mMainView.showString(s);
                     }
                 });
