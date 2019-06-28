@@ -26,24 +26,27 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void login() {
-        Disposable disposable = Observable.just("12").map(new Function<String, Integer>() {
-            @Override
-            public Integer apply(String s) throws Exception {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return 12;
-            }
-        }).subscribeOn(Schedulers.newThread())
+        Disposable disposable = Observable.just("12")
+                .map(new Function<String, Integer>() {
+                    @Override
+                    public Integer apply(String s) throws Exception {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return 12;
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Exception {
                         //在主线程中执行
                         mLoginView.showLoadingDialog();
                     }
-                }).subscribeOn(AndroidSchedulers.mainThread())
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Integer>() {
                     @Override
@@ -56,5 +59,6 @@ public class LoginPresenter implements LoginContract.Presenter {
                         }
                     }
                 });
+        disposable.isDisposed();
     }
 }

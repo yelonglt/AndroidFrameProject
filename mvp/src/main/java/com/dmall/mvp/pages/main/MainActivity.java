@@ -1,5 +1,6 @@
 package com.dmall.mvp.pages.main;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.view.menu.MenuBuilder;
@@ -25,7 +26,7 @@ public class MainActivity extends AppActivity {
     }
 
     @Override
-    protected BaseFragment getFirstFragment() {
+    protected BaseFragment getFragment() {
         MainFragment mainFragment = new MainFragment();
         new MainPresenter(mainFragment);
         return mainFragment;
@@ -40,25 +41,23 @@ public class MainActivity extends AppActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.item0) {
-            Toast.makeText(MainActivity.this, "Hello", Toast.LENGTH_SHORT).show();
-            return true;
-        }
+        Toast.makeText(MainActivity.this, "Hello id=" + id + "--" + item.getTitle(), Toast.LENGTH_SHORT).show();
         return super.onOptionsItemSelected(item);
     }
 
     /**
      * 显示item中的图片
      */
+    @SuppressLint("RestrictedApi")
     @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if (menu != null) {
             if (menu.getClass() == MenuBuilder.class) {
                 try {
-                    Method m = menu.getClass()
+                    @SuppressLint("PrivateApi") Method method = menu.getClass()
                             .getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-                    m.setAccessible(true);
-                    m.invoke(menu, true);
+                    method.setAccessible(true);
+                    method.invoke(menu, true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

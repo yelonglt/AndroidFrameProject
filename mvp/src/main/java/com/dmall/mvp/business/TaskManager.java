@@ -6,7 +6,7 @@ package com.dmall.mvp.business;
  */
 public class TaskManager {
 
-    TaskDataSource mDataSource;
+    private TaskDataSource mDataSource;
 
     public TaskManager(TaskDataSource dataSource) {
         mDataSource = dataSource;

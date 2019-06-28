@@ -17,7 +17,7 @@ public abstract class AppActivity extends BaseActivity {
     /**
      * 获取Activity添加的第一个BaseFragment
      */
-    protected abstract BaseFragment getFirstFragment();
+    protected abstract BaseFragment getFragment();
 
     /**
      * 处理接收到的Intent参数
@@ -41,14 +41,10 @@ public abstract class AppActivity extends BaseActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        //避免重复添加Fragment
-        if (null == getSupportFragmentManager().getFragments()) {
-            BaseFragment firstFragment = getFirstFragment();
-            if (null != firstFragment) {
-                addFragment(firstFragment);
-            }
+        BaseFragment baseFragment = getFragment();
+        if (baseFragment != null) {
+            addFragment(baseFragment);
         }
-
     }
 
     @Override

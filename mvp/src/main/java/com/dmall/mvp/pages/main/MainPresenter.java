@@ -36,11 +36,9 @@ public class MainPresenter implements MainContract.Presenter {
 
         //使用RxJava
         Disposable disposable = Observable.just("")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(Schedulers.io())
                 .map(new Function<String, String>() {
                     @Override
-                    public String apply(String input) {
+                    public String apply(String s) throws Exception {
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
@@ -48,14 +46,15 @@ public class MainPresenter implements MainContract.Presenter {
                         }
                         return mManager.getShowContent();
                     }
-                }).observeOn(AndroidSchedulers.mainThread())
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
                         mMainView.showString(s);
                     }
                 });
-
-
+        disposable.isDisposed();
     }
 }

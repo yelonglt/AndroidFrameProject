@@ -34,7 +34,7 @@ public class LoginActivity extends AppActivity {
     }
 
     @Override
-    protected BaseFragment getFirstFragment() {
+    protected BaseFragment getFragment() {
         LoginFragment loginFragment = LoginFragment.newInstance(username);
         new LoginPresenter(loginFragment);
         return loginFragment;
